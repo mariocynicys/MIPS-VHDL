@@ -37,20 +37,20 @@ R0
 R1
 R2
 R3
-R4
-Z9 8D:\University\Computer Architecture\7 - Project\Code\Data_Memory.vhd
-Z10 FD:\University\Computer Architecture\7 - Project\Code\Data_Memory.vhd
+Z9 dD:/University/Computer Architecture/7 - Project/MIPS-VHDL
+Z10 8D:/University/Computer Architecture/7 - Project/Code/Data_Memory.vhd
+Z11 FD:/University/Computer Architecture/7 - Project/Code/Data_Memory.vhd
 l0
 L6
 VLW6[7J70nD[`aiCdY[PjH3
 !s100 QXfoM>6b1W>c7[VZGZMmP3
 R5
 32
-Z11 !s110 1640080505
+Z12 !s110 1640083745
 !i10b 1
-Z12 !s108 1640080504.000000
-Z13 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\University\Computer Architecture\7 - Project\Code\Data_Memory.vhd|
-Z14 !s107 D:\University\Computer Architecture\7 - Project\Code\Data_Memory.vhd|
+Z13 !s108 1640083745.000000
+Z14 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/University/Computer Architecture/7 - Project/Code/Data_Memory.vhd|
+Z15 !s107 D:/University/Computer Architecture/7 - Project/Code/Data_Memory.vhd|
 !i113 1
 R6
 R7
@@ -59,41 +59,41 @@ R0
 R1
 R2
 R3
-Z15 DEx4 work 11 data_memory 0 22 LW6[7J70nD[`aiCdY[PjH3
+Z16 DEx4 work 11 data_memory 0 22 LW6[7J70nD[`aiCdY[PjH3
 l20
 L17
-Z16 VRn3aIcI4QA5:f`91<mA`X2
-Z17 !s100 BI6Ukj42_[4P]@UNgGMeK3
+Z17 VRn3aIcI4QA5:f`91<mA`X2
+Z18 !s100 BI6Ukj42_[4P]@UNgGMeK3
 R5
 32
-R11
-!i10b 1
 R12
+!i10b 1
 R13
 R14
+R15
 !i113 1
 R6
 R7
 Eexception1_unit
-Z18 w1639780399
+Z19 w1639780399
 R0
 R1
 R2
 R3
-R4
-Z19 8D:\University\Computer Architecture\7 - Project\Code\Exception1.vhd
-Z20 FD:\University\Computer Architecture\7 - Project\Code\Exception1.vhd
+R9
+Z20 8D:/University/Computer Architecture/7 - Project/Code/Exception1.vhd
+Z21 FD:/University/Computer Architecture/7 - Project/Code/Exception1.vhd
 l0
 L6
 VF50kD:Ej38YgJU2B`fLgL3
 !s100 5zeSB=gCDVLKQd;?nG<_W0
 R5
 32
-Z21 !s110 1640080504
-!i10b 1
 R12
-Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\University\Computer Architecture\7 - Project\Code\Exception1.vhd|
-Z23 !s107 D:\University\Computer Architecture\7 - Project\Code\Exception1.vhd|
+!i10b 1
+R13
+Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/University/Computer Architecture/7 - Project/Code/Exception1.vhd|
+Z23 !s107 D:/University/Computer Architecture/7 - Project/Code/Exception1.vhd|
 !i113 1
 R6
 R7
@@ -109,32 +109,32 @@ Vd8@lYjR@ZbHP]N]ZS>oU61
 !s100 [I3Rj=a[5Gk<o]fbjmXJK0
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 R22
 R23
 !i113 1
 R6
 R7
 Efetch
-Z25 w1640080500
+Z25 w1640083567
 R0
 R1
 R2
 R3
-R4
+R9
 Z26 8D:/University/Computer Architecture/7 - Project/Code/Fetch.vhd
 Z27 FD:/University/Computer Architecture/7 - Project/Code/Fetch.vhd
 l0
 L6
-VT3Qo>RDBchRD;>Whn9Be01
-!s100 CHYPODhjA3h]mkJo`5:=l3
+VAk_H_f=IzD`I:477cIj0;2
+!s100 iY:NhIO95Z?X@zDYh0:OF2
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 Z28 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/University/Computer Architecture/7 - Project/Code/Fetch.vhd|
 Z29 !s107 D:/University/Computer Architecture/7 - Project/Code/Fetch.vhd|
 !i113 1
@@ -143,46 +143,46 @@ R7
 Afetch1
 R24
 Z30 DEx4 work 8 pc_adder 0 22 jj:l8884TbW;nK^^:N<VF1
-Z31 DEx4 work 18 instruction_memory 0 22 39APIn89nH_kKd3mCLWF;0
+Z31 DEx4 work 18 instruction_memory 0 22 dCQL^l6g71c]eagG3JzNc1
 R0
 R1
 R2
 R3
-DEx4 work 5 fetch 0 22 T3Qo>RDBchRD;>Whn9Be01
+DEx4 work 5 fetch 0 22 Ak_H_f=IzD`I:477cIj0;2
 l22
 L13
-VS=@A:Kl=OQZi=j169N3li3
-!s100 _:QLK3OQG<DjB_O1>KkS42
+V4oP@ze^Un[i<cW01Q>hBd3
+!s100 :7UbD:GfBa`bEoO?fHZfT1
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 R28
 R29
 !i113 1
 R6
 R7
 Einstruction_memory
-Z32 w1640080282
+Z32 w1640083305
 R0
 R1
 R2
 R3
-R4
-Z33 8D:\University\Computer Architecture\7 - Project\Code\Instruction_Memory.vhd
-Z34 FD:\University\Computer Architecture\7 - Project\Code\Instruction_Memory.vhd
+R9
+Z33 8D:/University/Computer Architecture/7 - Project/Code/Instruction_Memory.vhd
+Z34 FD:/University/Computer Architecture/7 - Project/Code/Instruction_Memory.vhd
 l0
 L6
-V39APIn89nH_kKd3mCLWF;0
-!s100 cZ1XTDhNVi>hQo@S@HTO12
+VdCQL^l6g71c]eagG3JzNc1
+!s100 `7X<C;3@:W0[lANZ4DokD1
 R5
 32
-R21
-!i10b 1
 R12
-Z35 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\University\Computer Architecture\7 - Project\Code\Instruction_Memory.vhd|
-Z36 !s107 D:\University\Computer Architecture\7 - Project\Code\Instruction_Memory.vhd|
+!i10b 1
+R13
+Z35 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/University/Computer Architecture/7 - Project/Code/Instruction_Memory.vhd|
+Z36 !s107 D:/University/Computer Architecture/7 - Project/Code/Instruction_Memory.vhd|
 !i113 1
 R6
 R7
@@ -194,13 +194,13 @@ R3
 R31
 l17
 L13
-V4NHfec03Jc_FnC`m3SJ9?2
-!s100 VG>]Z9:4i^FOkLD[H>WKg2
+VSd<6L6i6`NRf<ST^m<1jn2
+!s100 JAcHo1oV6Tb@CTMigcEUl2
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 R35
 R36
 !i113 1
@@ -212,7 +212,7 @@ R0
 R1
 R2
 R3
-R4
+R9
 Z38 8D:/University/Computer Architecture/7 - Project/Code/Mux_2x1.vhd
 Z39 FD:/University/Computer Architecture/7 - Project/Code/Mux_2x1.vhd
 l0
@@ -221,9 +221,9 @@ V>U3h;jKPl=UV@YI;Ffn[Y0
 !s100 7]ca^deE]Xj^kd`DZ<6iP1
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 Z40 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/University/Computer Architecture/7 - Project/Code/Mux_2x1.vhd|
 Z41 !s107 D:/University/Computer Architecture/7 - Project/Code/Mux_2x1.vhd|
 !i113 1
@@ -241,9 +241,9 @@ V3W1778jI?`TY>@g7F>J`[2
 !s100 e0VIOO7TOVa1bl]?]cI=l2
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 R40
 R41
 !i113 1
@@ -255,7 +255,7 @@ R0
 R1
 R2
 R3
-R4
+R9
 Z43 8D:/University/Computer Architecture/7 - Project/Code/PC_Adder.vhd
 Z44 FD:/University/Computer Architecture/7 - Project/Code/PC_Adder.vhd
 l0
@@ -264,9 +264,9 @@ Vjj:l8884TbW;nK^^:N<VF1
 !s100 kJ@0PR[iW>_Xzf=flefQ^0
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 Z45 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/University/Computer Architecture/7 - Project/Code/PC_Adder.vhd|
 Z46 !s107 D:/University/Computer Architecture/7 - Project/Code/PC_Adder.vhd|
 !i113 1
@@ -284,9 +284,9 @@ V8685bnBoJRMTX@lmiJN?l3
 !s100 g@UD1G@Q5FiJ`]K[E8`JP3
 R5
 32
-R21
-!i10b 1
 R12
+!i10b 1
+R13
 R45
 R46
 !i113 1

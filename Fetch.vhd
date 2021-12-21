@@ -5,7 +5,7 @@ use IEEE.math_real.all;
 
 ENTITY Fetch IS
 PORT(
-	Instruction 	: Out 	std_logic_vector(15 Downto 0);
+	Instruction 	: Out 	std_logic_vector(31 Downto 0);
 	Clk		: IN	std_logic
 );
 END ENTITY Fetch;
@@ -15,7 +15,7 @@ ARCHITECTURE Fetch1 OF Fetch IS
 Signal PC	: std_logic_vector(31 Downto 0);
 Signal AdderOut : std_logic_vector(31 Downto 0);
 Signal Ex1Out 	: std_logic_vector(31 Downto 0);
-Signal Inst	: std_logic_vector(15 Downto 0);
+Signal Inst	: std_logic_vector(31 Downto 0);
 Signal isImm	: std_logic;
 Signal isEx1	: std_logic;
 
@@ -26,8 +26,8 @@ BEGIN
 	A : entity work.Instruction_Memory Port map
 	( 
 		Clk => Clk,
-		Address => PC,
-		DataOut => Inst
+		PC => PC,
+		Instruction => Inst
 	);
 
 	B : entity work.PC_Adder Port map
@@ -43,5 +43,6 @@ BEGIN
 		Clk => Clk,
 		PC_Out => Ex1Out,
 		IsExp => isEx1
-	); 
+	);
+ 
 END Fetch1;

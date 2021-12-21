@@ -6,8 +6,8 @@ use IEEE.math_real.all;
 ENTITY Instruction_Memory IS
 PORT(
 	Clk : IN std_logic;
-	Address : IN  std_logic_vector(31 DOWNTO 0);
-	DataOut : OUT std_logic_vector(15 DOWNTO 0));
+	PC : IN  std_logic_vector(31 DOWNTO 0);
+	Instruction : OUT std_logic_vector(31 DOWNTO 0));
 END ENTITY Instruction_Memory;
 
 ARCHITECTURE InstMemory OF Instruction_Memory IS
@@ -18,7 +18,8 @@ BEGIN
 	PROCESS(Clk) IS
 		BEGIN
 			IF rising_edge(Clk) THEN  
-				DataOut <= ram(to_integer(unsigned(Address)));
+			Instruction(15 DOWNTO 0) <= ram(to_integer(unsigned(PC)));
+			Instruction(31 DOWNTO 16) <= ram(to_integer(unsigned(PC) + 1));
 			END IF;
 	END PROCESS;
 END InstMemory;
