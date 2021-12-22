@@ -9,49 +9,54 @@ DESCRIPTION = 'An assembler for our MIPS processor.'
 RES_MEM_TIL = 10
 MAX_MEM_SIZ = 2 ** 20
 OPCODES = {
+  # OPCODE = Rsrc2[15:13] Rsrc1[12:10] Rdst[9:7] Func[6:4] Class[3:0]
   #C00
-  'nop' : '000''0000',
-  'hlt' : '001''0000',
-  'rst' : '010''0000',
+  'nop' : 'xxx' 'xxx' 'xxx' '000' '0000',
+  'hlt' : 'xxx' 'xxx' 'xxx' '001' '0000',
+  'rst' : 'xxx' 'xxx' 'xxx' '010' '0000', # Should not appear in the code, it's only a signal
   #C01
-  'setc': '001''0001',
+  'setc': 'xxx' 'xxx' 'xxx' '001' '0001',
   #C02
-  'mov' : '000''0010',
-  'not' : '010''0010',
-  'and' : '011''0010',
-  'add' : '100''0010',
-  'sub' : '101''0010',
-  'inc' : '110''0010',
+  # NOTE: MOV has it's operands swapped.
+    'mov' : 'xxx' '1st' '2nd' '000' '0010',
+  'not' : 'xxx' '1st' '1st' '010' '0010',
+  'and' : '3rd' '2nd' '1st' '011' '0010',
+  'add' : '3rd' '2nd' '1st' '100' '0010',
+  'sub' : '3rd' '2nd' '1st' '101' '0010',
+  'inc' : 'xxx' '1st' '1st' '110' '0010',
   #C03
-  'out' : '000''0011',
+  'out' : 'xxx' '1st' 'xxx' '000' '0011',
   #C04
-  'in'  : '000''0100', # Has MOV's func code
+  'in'  : 'xxx' 'xxx' '1st' '000' '0100', # Has MOV's Func code
   #C05
-  'push': '000''0101',
+  'push': 'xxx' '1st' 'xxx' '000' '0101',
   #C06
-  'pop' : '000''0110',
+  'pop' : 'xxx' 'xxx' '1st' '000' '0110',
   #C07
-  'jmp' : '000''0111',
-  'jz'  : '100''0111',
-  'jn'  : '010''0111',
-  'jc'  : '001''0111',
+  'jmp' : 'xxx' '1st' 'xxx' '000' '0111',
+  'jz'  : 'xxx' '1st' 'xxx' '100' '0111',
+  'jn'  : 'xxx' '1st' 'xxx' '010' '0111',
+  'jc'  : 'xxx' '1st' 'xxx' '001' '0111',
   #C08
-  'int' : '000''1010',
-  'call': '001''1010',
+  'int' : 'iii' 'iii' 'iii' '000' '1010', # The 9 is are replaced with the index.
+  'call': 'xxx' '1st' 'xxx' '001' '1010',
   #C09
-  'rti' : '000''1011',
-  'ret' : '001''1011',
-  #C10
-  'iadd': '100''1100', # Has ADD's func code
-  #C11
-  'ldm' : '000''1101', # Has MOV's func code
-  #C12
-  'ldd' : '100''1101', # Has ADD's func code
-  #C13
-  'std' : '100''1111', # Has ADD's func code
-  #C14: Documenting unused opcode classes.
-  'emp1': 'xxx''1000',
-  'emp1': 'xxx''1001',
+  'rti' : 'xxx' 'xxx' 'xxx' '000' '1011',
+  'ret' : 'xxx' 'xxx' 'xxx' '001' '1011',
+  # NOTE: Having an imm value clears Rsrc1 op slot for the ALU.
+    #C10
+    'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
+    'ldm' : 'xxx' 'xxx' '1st' '000' '1100', # Has MOV's Func code
+    # NOTE(ldd, std): The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
+      #C11
+      'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
+      #C12
+      # NOTE: Rsrc1 won't go to the ALU, but will pass directly to the memory.
+      'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
+  #C13: Documenting unused operation classes.
+  'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
+  'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
+  'emp3': 'xxx' 'xxx' 'xxx' 'xxx' '1101',
 }
 
 class Block:
@@ -80,22 +85,17 @@ class Format(enum.Enum):
   HEX = 'hex'
   BIN = 'bin'
 
-  def fmt(self):
-    if self == Format.HEX:
-      return '{:08x}'
-    elif self == Format.BIN:
-      return '{:032b}'
+  def fmt(self, n_bits: int) -> str:
+    if self == Format.BIN:
+      return '{:0' +   str(n_bits)    + 'b}'
+    else:
+      return '{:0' + str(n_bits // 4) + 'x}'
 
-  def siz(self):
-    return int(int(self.fmt()[3:-2])/2)
-
-def convert(instruction: List[str], ofrom: Format) -> Union[str, Tuple[str, str]]:
-  '''Converts an instruction passed as a list of operation and operands
-  to its equivalent extended opcode.'''
-
-  op = instruction[0]
-  return OPCODES[op]
-  
+  def siz(self, n_bits: int) -> int:
+    if self == Format.BIN:
+      return n_bits
+    else:
+      return n_bits // 4
 
 blocks: Dict[str, Union[Block, List[Block]]] = {
   'main': Block(stopper='hlt', wadr=0),
@@ -105,6 +105,58 @@ blocks: Dict[str, Union[Block, List[Block]]] = {
   'int2': Block(stopper='rti', wadr=8),
   'func': [], # List of Blocks
 }
+
+def convert(instruction: List[str], ofrom: Format) -> Union[str, Tuple[str, str]]:
+  '''Converts an instruction passed as a list of operation and operands
+  to its equivalent extended opcode.'''
+  # opc = opr dst, rc1, rc2
+  iln = len(instruction)
+  opr = instruction[0]
+  dst = instruction[1] if iln > 1 else '000'
+  rc1 = instruction[2] if iln > 2 else '000'
+  rc2 = instruction[3] if iln > 3 else '000'
+  opc = OPCODES[opr]
+  # Imm has not slot in `opc`.
+  imm = None
+  # We should not get one of these operations.
+  assert opr not in {'rst', 'emp1', 'emp2'}, f'Bad instruction: {instruction}'
+  if opr in {'ldd', 'std'}:
+    # Extract the Imm and rc2 surrounded by it. 
+    imm, rc1 = rc1[:-1].split('(')
+    # Convert the Imm to a 16-bit binary number.
+    imm = Format.BIN.fmt(16).format(int(imm, 0))
+  elif opr == 'iadd':
+    # Imm will be at rc2 location for IADD.
+    imm = Format.BIN.fmt(16).format(int(rc2, 0))
+  elif opr == 'ldm':
+    # Imm will be at rc1 location for LDM.
+    imm = Format.BIN.fmt(16).format(int(rc1, 0))
+  elif opr == 'int':
+    # Convert the index to a 9-bit binary number.
+    ind = Format.BIN.fmt(9).format(int(dst, 0))
+    opc = opc.replace(9 * 'i', ind)
+  # Remove any $ and r which are the registers' identifiers
+  # and format the registers' slot in binary.
+  rc1 = Format.BIN.fmt(3).format(int(rc1.replace('$', '')
+                                        .replace('r', ''), 0))
+  rc2 = Format.BIN.fmt(3).format(int(rc2.replace('$', '')
+                                        .replace('r', ''), 0))
+  dst = Format.BIN.fmt(3).format(int(dst.replace('$', '')
+                                        .replace('r', ''), 0))
+  # Substitute the registers' identifiers in the opcode.
+  opc = (opc.replace('1st', dst).replace('2nd', rc1)
+            .replace('3rd', rc2).replace( 'x' , '0'))
+  assert len(opc) == Format.BIN.siz(16), f'Couldn\'t parse {instruction}'
+  # Format the opcode with the wanted output format.
+  opc = ofrom.fmt(16).format(int(opc, 2))
+  # If we have an Imm, we are gonna return a tuple.
+  if imm is not None:
+    assert len(imm) == Format.BIN.siz(16), f'Couldn\'t parse {instruction}'
+    # Format the Imm with the requested output format.
+    imm = ofrom.fmt(16).format(int(imm, 2))
+    return (opc, imm)
+  else:
+    return opc
 
 def main():
   parser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -191,9 +243,9 @@ def main():
   converted_instructions: List[str] = [NOP for _ in range(MAX_MEM_SIZ)]
   for code_block in code_blocks:
     if code_block.wadr is not None:
-      addr = oform.fmt().format(code_block.addr).upper()
-      converted_instructions[code_block.wadr]     = addr[:oform.siz()]
-      converted_instructions[code_block.wadr + 1] = addr[oform.siz():]
+      addr = oform.fmt(32).format(code_block.addr).upper()
+      converted_instructions[code_block.wadr]     = addr[:oform.siz(16)]
+      converted_instructions[code_block.wadr + 1] = addr[oform.siz(16):]
     addr = code_block.addr
     for inst in code_block.code:
       converted_instructions[addr] = inst
@@ -202,8 +254,7 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
   try:
-    pass
+    main()
   except Exception as e:
     sys.exit(e)
