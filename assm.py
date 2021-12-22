@@ -47,17 +47,21 @@ OPCODES = {
     #C10
     'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
     'ldm' : 'xxx' 'xxx' '1st' '000' '1100', # Has MOV's Func code
-    # NOTE(ldd, std): The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
+    # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
       #C11
       'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
       #C12
-      # NOTE: Rsrc1 won't go to the ALU, but will pass directly to the memory.
-      'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
+      # NOTE: Rsrc1 won't reach the ALU, but will pass directly to the memory.
+        'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
   #C13: Documenting unused operation classes.
   'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
   'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
   'emp3': 'xxx' 'xxx' 'xxx' 'xxx' '1101',
 }
+OPCODES.pop('rst')
+OPCODES.pop('emp1')
+OPCODES.pop('emp2')
+OPCODES.pop('emp3')
 
 class Block:
   addr: int = 0
@@ -115,11 +119,10 @@ def convert(instruction: List[str], ofrom: Format) -> Union[str, Tuple[str, str]
   dst = instruction[1] if iln > 1 else '000'
   rc1 = instruction[2] if iln > 2 else '000'
   rc2 = instruction[3] if iln > 3 else '000'
-  opc = OPCODES[opr]
+  opc = OPCODES.get(opr)
+  assert opc is not None, f'Bad instruction: {instruction}'
   # Imm has not slot in `opc`.
   imm = None
-  # We should not get one of these operations.
-  assert opr not in {'rst', 'emp1', 'emp2'}, f'Bad instruction: {instruction}'
   if opr in {'ldd', 'std'}:
     # Extract the Imm and rc2 surrounded by it. 
     imm, rc1 = rc1[:-1].split('(')
@@ -148,12 +151,12 @@ def convert(instruction: List[str], ofrom: Format) -> Union[str, Tuple[str, str]
             .replace('3rd', rc2).replace( 'x' , '0'))
   assert len(opc) == Format.BIN.siz(16), f'Couldn\'t parse {instruction}'
   # Format the opcode with the wanted output format.
-  opc = ofrom.fmt(16).format(int(opc, 2))
+  opc = ofrom.fmt(16).format(int(opc, 2)).upper()
   # If we have an Imm, we are gonna return a tuple.
   if imm is not None:
     assert len(imm) == Format.BIN.siz(16), f'Couldn\'t parse {instruction}'
     # Format the Imm with the requested output format.
-    imm = ofrom.fmt(16).format(int(imm, 2))
+    imm = ofrom.fmt(16).format(int(imm, 2)).upper()
     return (opc, imm)
   else:
     return opc
