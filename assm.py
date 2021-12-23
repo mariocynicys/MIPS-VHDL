@@ -58,6 +58,7 @@ OPCODES = {
   'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
   'emp3': 'xxx' 'xxx' 'xxx' 'xxx' '1101',
 }
+
 OPCODES.pop('rst')
 OPCODES.pop('emp1')
 OPCODES.pop('emp2')
@@ -110,7 +111,7 @@ blocks: Dict[str, Union[Block, List[Block]]] = {
   'func': [], # List of Blocks
 }
 
-def convert(instruction: List[str], ofrom: Format) -> Union[str, Tuple[str, str]]:
+def convert(instruction: List[str], ofrom: Format) -> Tuple:
   '''Converts an instruction passed as a list of operation and operands
   to its equivalent extended opcode.'''
   # opc = opr dst, rc1, rc2
@@ -159,7 +160,7 @@ def convert(instruction: List[str], ofrom: Format) -> Union[str, Tuple[str, str]
     imm = ofrom.fmt(16).format(int(imm, 2)).upper()
     return (opc, imm)
   else:
-    return opc
+    return (opc,)
 
 def main():
   parser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -174,12 +175,17 @@ def main():
                       help='The format of the output instructions (hex or bin)')
   parser.add_argument('-d', '--delimiter',
                       help='The delimiter to insert between each two memory words.')
+  parser.add_argument('-p', '--print-code-blocks',
+                      action='store_true',
+                      help='Prints the info and content about the code blocks found'
+                      ' in the assembly code.')
   args = parser.parse_args()
 
   input = open(args.input_asm)
   output = open(args.output_bin, 'w') if args.output_bin else sys.stdout
-  delim = args.delimiter or ''
   oform = Format((args.output_format or 'bin').lower())
+  delim = args.delimiter or ''
+  print_blocks = args.print_code_blocks
 
   # Capture the whole file without comments as stripped lines.
   lines = [line.split(';', 1)[0].strip() for line in input.readlines()]
@@ -206,11 +212,7 @@ def main():
                          name=block_name, stopper=stopper, wadr=wadr)
       index += 1
       while True:
-        ins = convert(instructions[index], oform)
-        if isinstance(ins, str):
-          code_block.code.append(ins)
-        else:
-          code_block.code.append(ins[0]), code_block.code.append(ins[1])
+        code_block.code.extend(convert(instructions[index], oform))
         if instructions[index][0] == code_block.stopper:
           break
         index += 1
@@ -242,9 +244,10 @@ def main():
                         set(range(block2.addr, block2.addr + len(block2.code)))), (
                           f'{block1.name} and {block2.name} intersect.')
   # Write the parsed instructions to the output file.
-  NOP: str = convert(['nop'], oform)
+  NOP: str = convert(['nop'], oform)[0]
   converted_instructions: List[str] = [NOP for _ in range(MAX_MEM_SIZ)]
   for code_block in code_blocks:
+    if print_blocks: print(code_block)
     if code_block.wadr is not None:
       addr = oform.fmt(32).format(code_block.addr).upper()
       converted_instructions[code_block.wadr]     = addr[:oform.siz(16)]
@@ -254,7 +257,6 @@ def main():
       converted_instructions[addr] = inst
       addr += 1
   output.write(delim.join(converted_instructions))
-
 
 if __name__ == '__main__':
   try:

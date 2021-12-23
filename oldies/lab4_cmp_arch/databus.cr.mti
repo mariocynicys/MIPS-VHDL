@@ -1,0 +1,34 @@
+/home/omar/intelFPGA/lab4_cmp_arch/register.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab4_cmp_arch/register.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity regist
+-- Compiling architecture regist_logic of regist
+
+} {} {}} /home/omar/intelFPGA/lab4_cmp_arch/decoder.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab4_cmp_arch/decoder.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity decoder
+-- Compiling architecture decoder_logic of decoder
+
+} {} {}} /home/omar/intelFPGA/lab4_cmp_arch/tristatebuffer.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab4_cmp_arch/tristatebuffer.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity tristatebuf
+-- Compiling architecture tristatbuf_logic of tristatebuf
+
+} {} {}} /home/omar/intelFPGA/lab4_cmp_arch/random_mem.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab4_cmp_arch/random_mem.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity ram
+-- Compiling architecture syncrama of ram
+
+} {} {}}

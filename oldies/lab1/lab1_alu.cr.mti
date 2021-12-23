@@ -1,0 +1,41 @@
+D:/intelFPGA/18.0/lab1/partb.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/intelFPGA/18.0/lab1/partb.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity part_b
+-- Compiling architecture logic_b of part_b
+
+} {} {}} D:/intelFPGA/18.0/lab1/partc.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/intelFPGA/18.0/lab1/partc.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity part_c
+-- Compiling architecture logic_c of part_c
+
+} {} {}} D:/intelFPGA/18.0/lab1/alu.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/intelFPGA/18.0/lab1/alu.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity alu
+-- Compiling architecture alulogic of alu
+
+} {} {}} D:/intelFPGA/18.0/lab1/partd.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/intelFPGA/18.0/lab1/partd.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity part_d
+-- Compiling architecture logic_d of part_d
+
+} {} {}} D:/intelFPGA/18.0/lab1/parta.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/intelFPGA/18.0/lab1/parta.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity part_a
+-- Compiling architecture logic_a of part_a
+
+} {} {}}

@@ -1,0 +1,34 @@
+/home/omar/intelFPGA/lab3_cmp_arch/register.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab3_cmp_arch/register.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity regist
+-- Compiling architecture regist_logic of regist
+
+} {} {}} /home/omar/intelFPGA/lab3_cmp_arch/bus_controller.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab3_cmp_arch/bus_controller.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity bus_controller
+-- Compiling architecture bus_controller_logic of bus_controller
+
+} {} {}} /home/omar/intelFPGA/lab3_cmp_arch/tristatebuffer.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab3_cmp_arch/tristatebuffer.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity tristatebuf
+-- Compiling architecture tristatbuf_logic of tristatebuf
+
+} {} {}} /home/omar/intelFPGA/lab3_cmp_arch/decoder.vhd {2 {vcom -work work -2002 -explicit -stats=none /home/omar/intelFPGA/lab3_cmp_arch/decoder.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity decoder
+-- Compiling architecture decoder_logic of decoder
+** Warning: /home/omar/intelFPGA/lab3_cmp_arch/decoder.vhd(14): (vcom-1014) Array type selected signal assignment expression must be of a locally static subtype.
+
+} {} {}}

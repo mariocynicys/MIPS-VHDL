@@ -1,22 +1,23 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.numeric_std.all;
-use IEEE.math_real.all;
+USE IEEE.numeric_std.ALL;
+USE IEEE.math_real.ALL;
 
 ENTITY Mux_2x1 IS
-PORT(
-	Input1 	: IN 	std_logic;
-	Input2 	: IN 	std_logic;
-	Sel 	: IN 	std_logic;
-	Output	: Out 	std_logic
-);
+  PORT (
+    Input1 : IN STD_LOGIC;
+    Input2 : IN STD_LOGIC;
+    Sel    : IN STD_LOGIC;
+    Output : OUT STD_LOGIC
+  );
 END ENTITY Mux_2x1;
 
 ARCHITECTURE Mux2x1 OF Mux_2x1 IS
 BEGIN
-	With Sel Select
-		Output <=
-			Input1 	When '0',
-			Input2 	When '1',
-			'0' 	When others; 
+  WITH Sel SELECT
+    Output <=
+    Input1 WHEN '0',
+    Input2 WHEN '1',
+    '0' WHEN OTHERS;
+
 END Mux2x1;
