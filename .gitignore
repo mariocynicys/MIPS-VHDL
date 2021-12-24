@@ -1,5 +1,4 @@
 *.bak
-*.asm
 *.bin
 work
 .mypy_cache
