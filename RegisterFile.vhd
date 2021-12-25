@@ -44,11 +44,11 @@ BEGIN
     false WHEN OTHERS;
 
   r0 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool AND (dst = "000"), wdt, q0);
-  r1 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "001"), wdt, q0);
-  r2 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "010"), wdt, q0);
-  r3 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "011"), wdt, q0);
-  r4 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "100"), wdt, q0);
-  r5 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "101"), wdt, q0);
-  r6 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "110"), wdt, q0);
-  r7 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "111"), wdt, q0);
+  r1 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "001"), wdt, q1);
+  r2 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "010"), wdt, q2);
+  r3 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "011"), wdt, q3);
+  r4 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "100"), wdt, q4);
+  r5 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "101"), wdt, q5);
+  r6 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "110"), wdt, q6);
+  r7 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool and (dst = "111"), wdt, q7);
 END ARCHITECTURE;
