@@ -13,11 +13,6 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Compiling entity PC_Adder
 -- Compiling architecture PCAdder of PC_Adder
 
-} {} {}} buf_reg.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_reg.vhd
-Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
--- Loading package STANDARD
-** Error (suppressible): /home/omar/projs/mips/buf_reg.vhd(1): (vcom-1491) Empty source files.
-
 } {} {}} Data_Memory.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Data_Memory.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
@@ -28,15 +23,13 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Compiling entity Data_Memory
 -- Compiling architecture DataMemory of Data_Memory
 
-} {} {}} buf_fet.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_fet.vhd
+} {} {}} buf_fet.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_fet.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
-** Error (suppressible): /home/omar/projs/mips/buf_fet.vhd(1): (vcom-1491) Empty source files.
-
-} {} {}} buf_mem.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_mem.vhd
-Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
--- Loading package STANDARD
-** Error (suppressible): /home/omar/projs/mips/buf_mem.vhd(1): (vcom-1491) Empty source files.
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity buf_fet
+-- Compiling architecture buf_fet_arc of buf_fet
 
 } {} {}} Mux_2x1.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Mux_2x1.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
@@ -47,6 +40,16 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Loading package MATH_REAL
 -- Compiling entity Mux_2x1
 -- Compiling architecture Mux2x1 of Mux_2x1
+
+} {} {}} /home/omar/projs/mips/Data_Memory.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Data_Memory.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity Data_Memory
+-- Compiling architecture DataMemory of Data_Memory
 
 } {} {}} /home/omar/projs/mips/buf_reg.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_reg.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
@@ -63,15 +66,28 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Compiling entity PC_Adder
 -- Compiling architecture PCAdder of PC_Adder
 
-} {} {}} /home/omar/projs/mips/buf_fet.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_fet.vhd
+} {} {}} /home/omar/projs/mips/buf_fet.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_fet.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
-** Error (suppressible): /home/omar/projs/mips/buf_fet.vhd(1): (vcom-1491) Empty source files.
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity buf_fet
+-- Compiling architecture buf_fet_arc of buf_fet
 
 } {} {}} /home/omar/projs/mips/buf_mem.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_mem.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
 ** Error (suppressible): /home/omar/projs/mips/buf_mem.vhd(1): (vcom-1491) Empty source files.
+
+} {} {}} /home/omar/projs/mips/Mux_2x1.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Mux_2x1.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity Mux_2x1
+-- Compiling architecture Mux2x1 of Mux_2x1
 
 } {} {}} Exception1.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Exception1.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
@@ -82,6 +98,14 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Loading package MATH_REAL
 -- Compiling entity Exception1_Unit
 -- Compiling architecture Exception1 of Exception1_Unit
+
+} {} {}} RegisterFileRegister.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/RegisterFileRegister.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity RegisterFileRegister
+-- Compiling architecture RegisterFileRegisterArch of RegisterFileRegister
 
 } {} {}} Instruction_Memory.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Instruction_Memory.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
@@ -106,25 +130,48 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Loading entity PC_Adder
 -- Loading entity Exception1_Unit
 
-} {} {}} /home/omar/projs/mips/Fetch.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Fetch.vhd
+} {} {}} /home/omar/projs/mips/Exception1.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Exception1.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
 -- Loading package MATH_REAL
--- Compiling entity Fetch
--- Compiling architecture Fetch1 of Fetch
-** Error: (vcom-11) Could not find work.instruction_memory.
-** Error (suppressible): /home/omar/projs/mips/Fetch.vhd(26): (vcom-1195) Cannot find expanded name "work.Instruction_Memory".
-** Error: /home/omar/projs/mips/Fetch.vhd(26): Unknown expanded name.
-** Error: (vcom-11) Could not find work.pc_adder.
-** Error (suppressible): /home/omar/projs/mips/Fetch.vhd(33): (vcom-1195) Cannot find expanded name "work.PC_Adder".
-** Error: /home/omar/projs/mips/Fetch.vhd(33): Unknown expanded name.
--- Loading entity Exception1_Unit
-** Note: /home/omar/projs/mips/Fetch.vhd(48): VHDL Compiler exiting
+-- Compiling entity Exception1_Unit
+-- Compiling architecture Exception1 of Exception1_Unit
 
-} {10.0 11.0 12.0 14.0 15.0 16.0} {}} /home/omar/projs/mips/Instruction_Memory.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Instruction_Memory.vhd
+} {} {}} Decode.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Decode.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity DecodeStage
+-- Compiling architecture DecodeStageArch of DecodeStage
+** Error: /home/omar/projs/mips/Decode.vhd(24): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(25): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(26): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(27): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(28): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(29): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(30): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(31): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(33): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(34): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(35): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(36): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(37): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(38): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(39): Illegal sequential statement.
+** Error: /home/omar/projs/mips/Decode.vhd(40): Illegal sequential statement.
+** Error: (vcom-11) Could not find work.regsiterfileregister.
+** Error (suppressible): /home/omar/projs/mips/Decode.vhd(44): (vcom-1195) Cannot find expanded name "work.RegsiterFileRegister".
+** Error: /home/omar/projs/mips/Decode.vhd(44): (vcom-1581) No feasible entries for infix operator 'and'.
+** Error: /home/omar/projs/mips/Decode.vhd(44): Unknown expanded name.
+** Note: /home/omar/projs/mips/Decode.vhd(45): VHDL Compiler exiting
+
+} {10.0 27.0 28.0 30.0} {}} /home/omar/projs/mips/Instruction_Memory.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Instruction_Memory.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -134,9 +181,25 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Compiling entity Instruction_Memory
 -- Compiling architecture InstMemory of Instruction_Memory
 
-} {} {}} buf_alu.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/buf_alu.vhd
+} {} {}} /home/omar/projs/mips/Fetch.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Fetch.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
-** Error (suppressible): /home/omar/projs/mips/buf_alu.vhd(1): (vcom-1491) Empty source files.
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity Fetch
+-- Compiling architecture Fetch1 of Fetch
+-- Loading entity Instruction_Memory
+-- Loading entity PC_Adder
+-- Loading entity Exception1_Unit
+
+} {} {}} /home/omar/projs/mips/Register.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/omar/projs/mips/Register.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity Regsiter
+-- Compiling architecture RegsiterArch of Regsiter
 
 } {} {}}

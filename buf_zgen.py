@@ -33,9 +33,10 @@ output_file_name_no_ext = input_file_name.split('.')[0]
 port_args = []
 proc_body = []
 with open(input_file_name) as file:
-  for line in file.readlines():
-    splt = line.strip().replace(' ', '').split(':')
-    port_name, bit_count = splt if len(splt) > 1 else (splt[0], '1')
+  lines = [line.strip().replace(' ', '').split(';')[0].split(':')
+           for line in file.readlines() if line.strip()]
+  for line in lines:
+    port_name, bit_count = line if len(line) > 1 else (line[0], '1')
     port_args.append(PORT_ARG_TMPL.format(port_name, int(bit_count)-1))
     proc_body.append('{0}_out <= {0}_in'.format(port_name))
 
