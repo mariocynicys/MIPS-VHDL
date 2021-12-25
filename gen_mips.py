@@ -1,4 +1,28 @@
-; Copyright 1991-2009 Mentor Graphics Corporation
+#!/usr/bin/env python3
+import os.path
+import os
+
+def main():
+  project_dir = os.path.dirname(__file__)
+
+  vhdls = [os.path.abspath(vhdl)
+          for vhdl in os.listdir(project_dir)
+          if vhdl.endswith(('.vhd', '.vhdl'))]
+
+  vhdls.sort()
+  vhdl_count = FILE_COUNT.format(len(vhdls))
+  vhdl_files = '\n'.join([NEW_FILE.format(i, vhdl)
+                        for (i, vhdl) in enumerate(vhdls)])
+
+  mips_mpf = TMPL.format(vhdl_count, vhdl_files)
+  with open('mips.mpf', 'w') as file:
+    file.write(mips_mpf)
+
+FILE_COUNT = '''Project_Files_Count = {0}'''
+
+NEW_FILE='''Project_File_{0} = {1}\nProject_File_P_{0} = vhdl_novitalcheck 0 file_type vhdl group_id 0 cover_nofec 0 vhdl_nodebug 0 vhdl_1164 1 vhdl_noload 0 vhdl_synth 0 vhdl_enable0In 0 folder {{Top Level}} last_compile 0 vhdl_disableopt 0 vhdl_vital 0 cover_excludedefault 0 vhdl_warn1 1 vhdl_warn2 1 vhdl_explicit 1 vhdl_showsource 0 vhdl_warn3 1 cover_covercells 0 vhdl_0InOptions {{}} vhdl_warn4 1 voptflow 1 cover_optlevel 3 vhdl_options {{}} vhdl_warn5 1 toggle - ood 1 cover_noshort 0 compile_to work compile_order {0} cover_nosub 0 dont_compile 0 vhdl_use93 2008'''
+
+TMPL = '''; Copyright 1991-2009 Mentor Graphics Corporation
 ;
 ; All Rights Reserved.
 ;
@@ -104,7 +128,7 @@ work = work
 ; Value of 1 or 1993 for VHDL-1993.
 ; Default or value of 2 or 2002 for VHDL-2002.
 ; Default or value of 3 or 2008 for VHDL-2008.
-VHDL93 = 2002
+VHDL93 = 2008
 
 ; Show source line containing error. Default is off.
 ; Show_source = 1
@@ -358,7 +382,7 @@ ConcurrentFileLimit = 40
 ; the earliest times get truncated from the file.
 ; If both time and size limits are specified the most restrictive is used.
 ; UserTimeUnits are used if time units are not specified.
-; The default is 0 (no limit).  Example: WLFTimeLimit = {100 ms}
+; The default is 0 (no limit).  Example: WLFTimeLimit = {{100 ms}}
 ; WLFTimeLimit = 0
 
 ; WLF file size limit.  Limit WLF file size, as closely as possible,
@@ -397,9 +421,9 @@ ConcurrentFileLimit = 40
 ; wlf file can be viewed in the MsgViewer).  The other settings
 ; are to send messages only to the transcript or only to the 
 ; wlf file.  The valid values are
-;    both  {default}
-;    tran  {transcript only}
-;    wlf   {wlf file only}
+;    both  {{default}}
+;    tran  {{transcript only}}
+;    wlf   {{wlf file only}}
 ; msgmode = both
 [Project]
 ** Warning: ; Warning -- Do not edit the project properties directly.
@@ -410,7 +434,8 @@ ConcurrentFileLimit = 40
 Project_Version = 6
 Project_DefaultLib = work
 Project_SortMethod = unused
-Project_Files_Count = 0
+{0}
+{1}
 Project_Sim_Count = 0
 Project_Folder_Count = 0
 Echo_Compile_Output = 0
@@ -460,3 +485,5 @@ DEBUGARCHIVE_DoubleClick = Edit
 DEBUGARCHIVE_CustomDoubleClick = 
 Project_Major_Version = 2020
 Project_Minor_Version = 1
+'''
+main()
