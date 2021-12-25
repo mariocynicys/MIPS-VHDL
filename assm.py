@@ -18,7 +18,7 @@ OPCODES = {
   'setc': 'xxx' 'xxx' 'xxx' '001' '0001',
   #C02
   # NOTE: MOV has it's operands swapped.
-    'mov' : 'xxx' '1st' '2nd' '000' '0010',
+  'mov' : 'xxx' '1st' '2nd' '000' '0010',
   'not' : 'xxx' '1st' '1st' '010' '0010',
   'and' : '3rd' '2nd' '1st' '011' '0010',
   'add' : '3rd' '2nd' '1st' '100' '0010',
@@ -44,15 +44,15 @@ OPCODES = {
   'rti' : 'xxx' 'xxx' 'xxx' '000' '1011',
   'ret' : 'xxx' 'xxx' 'xxx' '001' '1011',
   # NOTE: Having an imm value clears Rsrc1 op slot for the ALU.
-    #C10
-    'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
-    'ldm' : 'xxx' 'xxx' '1st' '000' '1100', # Has MOV's Func code
-    # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
-      #C11
-      'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
-      #C12
-      # NOTE: Rsrc1 won't reach the ALU, but will pass directly to the memory.
-        'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
+  #C10
+  'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
+  'ldm' : 'xxx' 'xxx' '1st' '000' '1100', # Has MOV's Func code
+  # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
+  #C11
+  'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
+  # NOTE: Rsrc1 won't reach the ALU, but will pass directly to the memory.
+  #C12
+  'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
   #C13: Documenting unused operation classes.
   'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
   'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
