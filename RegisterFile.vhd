@@ -5,7 +5,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 ENTITY RegisterFile IS
   PORT (
     clk           : IN STD_LOGIC;
-    wen           : IN STD_LOGIC;
+    wen           : IN STD_LOGIC_VECTOR(0 downto 0);
     wdt           : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     sr1, sr2, dst : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     rsr1, rsr2    : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
@@ -40,7 +40,7 @@ BEGIN
     q0 WHEN OTHERS;
 
   WITH wen SELECT
-    wen_bool <= true WHEN '1',
+    wen_bool <= true WHEN "1",
     false WHEN OTHERS;
 
   r0 : ENTITY work.RegisterFileRegister PORT MAP (clk, wen_bool AND (dst = "000"), wdt, q0);
