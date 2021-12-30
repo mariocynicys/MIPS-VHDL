@@ -38,7 +38,7 @@ OPCODES = {
   'jn'  : 'xxx' '1st' 'xxx' '010' '0111',
   'jc'  : 'xxx' '1st' 'xxx' '001' '0111',
   #C08
-  'int' : 'iii' 'iii' 'iii' '000' '1010', # The 9 is are replaced with the index.
+  'int' : 'iii' 'iii' 'iii' '000' '1010', # The 9is are replaced with the index.
   'call': 'xxx' '1st' 'xxx' '001' '1010',
   #C09
   'rti' : 'xxx' 'xxx' 'xxx' '000' '1011',
@@ -46,23 +46,22 @@ OPCODES = {
   # NOTE: Having an imm value clears Rsrc1 op slot for the ALU.
   #C10
   'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
-  'ldm' : 'xxx' 'xxx' '1st' '000' '1100', # Has MOV's Func code
-  # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
   #C11
+  'ldm' : 'xxx' 'xxx' '1st' '000' '1101', # Has MOV's Func code
+  # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
+  #C12
   'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
   # NOTE: Rsrc1 won't reach the ALU, but will pass directly to the memory.
-  #C12
+  #C13
   'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
-  #C13: Documenting unused operation classes.
+  #C14: Documenting unused operation classes.
   'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
   'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
-  'emp3': 'xxx' 'xxx' 'xxx' 'xxx' '1101',
 }
 
 OPCODES.pop('rst')
 OPCODES.pop('emp1')
 OPCODES.pop('emp2')
-OPCODES.pop('emp3')
 
 class Block:
   addr: int = 0

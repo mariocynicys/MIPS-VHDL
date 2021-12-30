@@ -1,6 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
+
 ENTITY MemoryStage IS
   PORT (
     clk                  : IN STD_LOGIC;
