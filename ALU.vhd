@@ -4,7 +4,6 @@ USE IEEE.numeric_std.ALL;
 
 ENTITY ALU IS
   PORT (
-    clk      : IN STD_LOGIC;
     func     : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     op1, op2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     res      : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);

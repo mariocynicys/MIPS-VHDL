@@ -19,7 +19,8 @@ ENTITY MemoryStage IS
     new_pc           : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     new_flgs         : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
 
-    ex2 : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+    ex2    : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    exp_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END ENTITY;
 
@@ -77,12 +78,9 @@ BEGIN
 
   -- stack pointer things.
   PROCESS (clk)
+    VARIABLE stack_reg_var : STD_LOGIC_VECTOR(31 DOWNTO 0);
   BEGIN
     IF rising_edge(clk) THEN
-      -- fire ex2 if we need.
-      IF stack_reg > x"00010000" THEN
-        ex2 <= "1";
-      END IF;
       -- reset the stack.
       IF rst = "1" THEN
         stack_reg <= x"00010000";
@@ -90,18 +88,24 @@ BEGIN
       END IF;
 
       IF ps_pp = "1" THEN
+        stack_reg_var := stack_reg;
         IF mr = "1" THEN
           IF pc_op = "1" THEN
-            stack_reg <= STD_LOGIC_VECTOR(UNSIGNED(stack_reg) + 2);
+            stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) + 2);
           ELSE
-            stack_reg <= STD_LOGIC_VECTOR(UNSIGNED(stack_reg) + 1);
+            stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) + 1);
           END IF;
         ELSIF mw = "1" THEN
           IF pc_op = "1" THEN
-            stack_reg <= STD_LOGIC_VECTOR(UNSIGNED(stack_reg) - 2);
+            stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) - 2);
           ELSE
-            stack_reg <= STD_LOGIC_VECTOR(UNSIGNED(stack_reg) - 1);
+            stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) - 1);
           END IF;
+        END IF;
+        stack_reg <= stack_reg_var;
+        IF stack_reg_var > x"000100000" THEN
+          ex2    <= "1";
+          exp_pc <= pc;
         END IF;
       END IF;
     END IF;

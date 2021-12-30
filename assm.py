@@ -13,7 +13,8 @@ OPCODES = {
   #C00
   'nop' : 'xxx' 'xxx' 'xxx' '000' '0000',
   'hlt' : 'xxx' 'xxx' 'xxx' '001' '0000',
-  'rst' : 'xxx' 'xxx' 'xxx' '010' '0000', # Should not appear in the code, it's only a signal
+  # NOTE: RST should not appear in the code, it is only a signal.
+  'rst' : 'xxx' 'xxx' 'xxx' '010' '0000',
   #C01
   'setc': 'xxx' 'xxx' 'xxx' '001' '0001',
   #C02
@@ -37,26 +38,29 @@ OPCODES = {
   'jz'  : 'xxx' '1st' 'xxx' '100' '0111',
   'jn'  : 'xxx' '1st' 'xxx' '010' '0111',
   'jc'  : 'xxx' '1st' 'xxx' '001' '0111',
+  # NOTE: Unused class.
   #C08
-  'int' : 'iii' 'iii' 'iii' '000' '1010', # The 9is are replaced with the index.
-  'call': 'xxx' '1st' 'xxx' '001' '1010',
+  'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
+  # NOTE: Unused class.
   #C09
+  'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
+  #C10
+  'int' : 'iii' 'iii' 'iii' '000' '1010', # The 9(i)s are replaced with the index.
+  'call': 'xxx' '1st' 'xxx' '001' '1010',
+  #C11
   'rti' : 'xxx' 'xxx' 'xxx' '000' '1011',
   'ret' : 'xxx' 'xxx' 'xxx' '001' '1011',
   # NOTE: Having an imm value clears Rsrc1 op slot for the ALU.
-  #C10
+  #C12
   'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
-  #C11
+  #C13
   'ldm' : 'xxx' 'xxx' '1st' '000' '1101', # Has MOV's Func code
   # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
-  #C12
+  #C14
   'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
+  #C15
   # NOTE: Rsrc1 won't reach the ALU, but will pass directly to the memory.
-  #C13
   'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
-  #C14: Documenting unused operation classes.
-  'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
-  'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
 }
 
 OPCODES.pop('rst')

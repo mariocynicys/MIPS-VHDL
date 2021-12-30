@@ -3,7 +3,6 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY Forwarder IS
   PORT (
-    clk        : IN STD_LOGIC;
     sr1, sr2   : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     wb_alu     : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     dst_alu    : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
