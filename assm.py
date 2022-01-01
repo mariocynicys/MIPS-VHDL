@@ -156,7 +156,7 @@ def convert(instruction: List[str], ofrom: Format) -> Tuple:
   assert len(opc) == Format.BIN.siz(16), f'Couldn\'t parse {instruction}'
   # Format the opcode with the wanted output format.
   opc = ofrom.fmt(16).format(int(opc, 2)).upper()
-  # If we have an Imm, we are gonna return a tuple.
+  # If we have an Imm, we are gonna return it in the tuple.
   if imm is not None:
     assert len(imm) == Format.BIN.siz(16), f'Couldn\'t parse {instruction}'
     # Format the Imm with the requested output format.
