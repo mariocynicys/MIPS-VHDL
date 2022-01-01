@@ -9,58 +9,59 @@ DESCRIPTION = 'An assembler for our MIPS processor.'
 RES_MEM_TIL = 10
 MAX_MEM_SIZ = 2 ** 20
 OPCODES = {
-  # OPCODE = Rsrc2[15:13] Rsrc1[12:10] Rdst[9:7] Func[6:4] Class[3:0]
+  # OPCODE = Class[3:0] Func[6:4] Rdst[9:7] Rsrc1[12:10] Rsrc2[15:13]
+  # Ideally Rdst is the 1st operand, Rsrc1 is the 2nd, and Rsrc2 is the 3rd.
   #C00
-  'nop' : 'xxx' 'xxx' 'xxx' '000' '0000',
-  'hlt' : 'xxx' 'xxx' 'xxx' '001' '0000',
+  'nop' : '0000' '000' 'xxx' 'xxx' 'xxx',
+  'hlt' : '0000' '001' 'xxx' 'xxx' 'xxx',
   # NOTE: RST should not appear in the code, it is only a signal.
-  'rst' : 'xxx' 'xxx' 'xxx' '010' '0000',
+  'rst' : '0000' '010' 'xxx' 'xxx' 'xxx',
   #C01
-  'setc': 'xxx' 'xxx' 'xxx' '001' '0001',
+  'setc': '0001' '001' 'xxx' 'xxx' 'xxx',
   #C02
   # NOTE: MOV has it's operands swapped.
-  'mov' : 'xxx' '1st' '2nd' '000' '0010',
-  'not' : 'xxx' '1st' '1st' '010' '0010',
-  'and' : '3rd' '2nd' '1st' '011' '0010',
-  'add' : '3rd' '2nd' '1st' '100' '0010',
-  'sub' : '3rd' '2nd' '1st' '101' '0010',
-  'inc' : 'xxx' '1st' '1st' '110' '0010',
+  'mov' : '0010' '000' '2nd' '1st' 'xxx',
+  'not' : '0010' '010' '1st' '1st' 'xxx',
+  'and' : '0010' '011' '1st' '2nd' '3rd',
+  'add' : '0010' '100' '1st' '2nd' '3rd',
+  'sub' : '0010' '101' '1st' '2nd' '3rd',
+  'inc' : '0010' '110' '1st' '1st' 'xxx',
   #C03
-  'out' : 'xxx' '1st' 'xxx' '000' '0011',
+  'out' : '0011' '000' 'xxx' '1st' 'xxx',
   #C04
-  'in'  : 'xxx' 'xxx' '1st' '000' '0100', # Has MOV's Func code
+  'in'  : '0100' '000' '1st' 'xxx' 'xxx', # Has MOV's Func code
   #C05
-  'push': 'xxx' '1st' 'xxx' '000' '0101',
+  'push': '0101' '000' 'xxx' '1st' 'xxx',
   #C06
-  'pop' : 'xxx' 'xxx' '1st' '000' '0110',
+  'pop' : '0110' '000' '1st' 'xxx' 'xxx',
   #C07
-  'jmp' : 'xxx' '1st' 'xxx' '000' '0111',
-  'jz'  : 'xxx' '1st' 'xxx' '100' '0111',
-  'jn'  : 'xxx' '1st' 'xxx' '010' '0111',
-  'jc'  : 'xxx' '1st' 'xxx' '001' '0111',
+  'jmp' : '0111' '000' 'xxx' '1st' 'xxx',
+  'jz'  : '0111' '100' 'xxx' '1st' 'xxx',
+  'jn'  : '0111' '010' 'xxx' '1st' 'xxx',
+  'jc'  : '0111' '001' 'xxx' '1st' 'xxx',
   # NOTE: Unused class.
   #C08
-  'emp1': 'xxx' 'xxx' 'xxx' 'xxx' '1000',
+  'emp1': '1000' 'xxx' 'xxx' 'xxx' 'xxx',
   # NOTE: Unused class.
   #C09
-  'emp2': 'xxx' 'xxx' 'xxx' 'xxx' '1001',
+  'emp2': '1001' 'xxx' 'xxx' 'xxx' 'xxx',
   #C10
-  'int' : 'iii' 'iii' 'iii' '000' '1010', # The 9(i)s are replaced with the index.
-  'call': 'xxx' '1st' 'xxx' '001' '1010',
+  'int' : '1010' '000' 'iii' 'iii' 'iii', # The 9(i)s are replaced with the index.
+  'call': '1010' '001' 'xxx' '1st' 'xxx',
   #C11
-  'rti' : 'xxx' 'xxx' 'xxx' '000' '1011',
-  'ret' : 'xxx' 'xxx' 'xxx' '001' '1011',
+  'rti' : '1011' '000' 'xxx' 'xxx' 'xxx',
+  'ret' : '1011' '001' 'xxx' 'xxx' 'xxx',
   # NOTE: Having an imm value clears Rsrc1 op slot for the ALU.
   #C12
-  'iadd': '2nd' 'xxx' '1st' '100' '1100', # Has ADD's Func code
+  'iadd': '1100' '100' '1st' 'xxx' '2nd', # Has ADD's Func code
   #C13
-  'ldm' : 'xxx' 'xxx' '1st' '000' '1101', # Has MOV's Func code
+  'ldm' : '1101' '000' '1st' 'xxx' 'xxx', # Has MOV's Func code
   # NOTE: The `offset(Rsrc)` expression breaks to -> 2nd op and `imm`.
   #C14
-  'ldd' : '2nd' 'xxx' '1st' '100' '1110', # Has ADD's Func code
+  'ldd' : '1110' '100' '1st' 'xxx' '2nd', # Has ADD's Func code
   #C15
   # NOTE: Rsrc1 won't reach the ALU, but will pass directly to the memory.
-  'std' : '2nd' '1st' 'xxx' '100' '1111', # Has ADD's Func code
+  'std' : '1111' '100' 'xxx' '1st' '2nd', # Has ADD's Func code
 }
 
 OPCODES.pop('rst')
@@ -125,7 +126,7 @@ def convert(instruction: List[str], ofrom: Format) -> Tuple:
   rc2 = instruction[3] if iln > 3 else '000'
   opc = OPCODES.get(opr)
   assert opc is not None, f'Bad instruction: {instruction}'
-  # Imm has not slot in `opc`.
+  # Imm has no slot in `opc`.
   imm = None
   if opr in {'ldd', 'std'}:
     # Extract the Imm and rc2 surrounded by it. 
@@ -250,7 +251,7 @@ def main():
   NOP: str = convert(['nop'], oform)[0]
   converted_instructions: List[str] = [NOP for _ in range(MAX_MEM_SIZ)]
   for code_block in code_blocks:
-    if print_blocks: print(code_block)
+    if print_blocks: print(code_block, file=sys.stderr)
     if code_block.wadr is not None:
       addr = oform.fmt(32).format(code_block.addr).upper()
       converted_instructions[code_block.wadr]     = addr[:oform.siz(16)]

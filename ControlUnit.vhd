@@ -1,0 +1,15 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.ALL;
+USE IEEE.math_real.ALL;
+
+ENTITY ControlUnit IS
+  PORT (
+    operation : STD_LOGIC_VECTOR(6 DOWNTO 0)
+  );
+END ENTITY;
+
+ARCHITECTURE ControlUnitArch OF ControlUnit IS
+BEGIN
+
+END ARCHITECTURE;

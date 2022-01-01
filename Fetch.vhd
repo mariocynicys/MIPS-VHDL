@@ -1,0 +1,16 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.ALL;
+USE IEEE.math_real.ALL;
+
+ENTITY FetchStage IS
+  PORT (
+    clk   : IN STD_LOGIC;
+    reset : IN STD_LOGIC
+  );
+END ENTITY;
+
+ARCHITECTURE FetchStageArch OF FetchStage IS
+BEGIN
+
+END ARCHITECTURE;
