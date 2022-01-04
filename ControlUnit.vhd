@@ -85,7 +85,7 @@ BEGIN
     "0" WHEN OTHERS;
 
   WITH oper SELECT
-    mr <=
+    mw <=
     "1" WHEN "0101", -- push
     "1" WHEN "1111", -- std
     "1" WHEN "1010", -- int/call
