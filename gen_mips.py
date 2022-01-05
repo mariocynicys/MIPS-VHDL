@@ -2,17 +2,21 @@
 import os.path
 import os
 
+
+VHDL_DIRS = ['FetchDecode', 'RegisterRead', 'Execution',
+             'Memory', 'WriteBack', 'Buffers',]
+
+PROJECT_DIR = os.path.dirname(__file__)
+
 def main():
-  project_dir = os.path.dirname(__file__)
+  vhdls = [os.path.abspath(os.path.join(vhdl_dir, vhdl)) 
+           for vhdl_dir in VHDL_DIRS 
+           for vhdl in os.listdir(os.path.join(PROJECT_DIR, vhdl_dir))
+           if vhdl.endswith(('.vhd', '.vhdl'))]
 
-  vhdls = [os.path.abspath(vhdl)
-          for vhdl in os.listdir(project_dir)
-          if vhdl.endswith(('.vhd', '.vhdl'))]
-
-  vhdls.sort()
   vhdl_count = FILE_COUNT.format(len(vhdls))
   vhdl_files = '\n'.join([NEW_FILE.format(i, vhdl)
-                        for (i, vhdl) in enumerate(vhdls)])
+                          for (i, vhdl) in enumerate(vhdls)])
 
   mips_mpf = TMPL.format(vhdl_count, vhdl_files)
   with open('mips.mpf', 'w') as file:

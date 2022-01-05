@@ -42,24 +42,14 @@ ARCHITECTURE ControlUnitArch OF ControlUnit IS
   -------------------------------------------------------------
   -- func codes:
   CONSTANT cal_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "001";
+  CONSTANT and_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "011";
+  CONSTANT add_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "100";
+  CONSTANT sub_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "101";
   -------------------------------------------------------------
-  -- This is the emp1 instruction, the control unit will never encounter it.
-  -- We can use it as escape some instruction that match on the 4bit class code
-  -- but differ on function code.
-  -- I.E. `oper` will never match `esc_op`.
-  CONSTANT esc_op : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1000";
-
 BEGIN
 
   oper <= operation(6 DOWNTO 3);
   func <= operation(2 DOWNTO 0);
-
-  WITH oper & func SELECT
-  -- this translates to: consider this signal `call` as `int_cal_op`
-  -- if it is a call op, otherwise consider it a null
-  call <=
-    int_cal_op WHEN int_cal_op & cal_func,
-    esc_op WHEN OTHERS;
 
   WITH oper SELECT
     imm <=
@@ -128,19 +118,6 @@ BEGIN
     "1" WHEN int_cal_op,
     "0" WHEN OTHERS;
 
-  -- WITH oper SELECT
-  --   sr1_used <=
-  --   "1" WHEN alu_op,
-  --   "1" when out_op,
-  --   "1" WHEN push_op,
-  --   "1" WHEN ldd_op,
-  --   "1" WHEN std_op,
-  --   "1" WHEN jmp_op,
-  --   -- NOTE: you need to suppress vcom-1563 because we are depending on the signal
-  --   -- `call` here which is not locally static. But this is safe, no worries.
-  --   "1" WHEN call, -- note that only call uses the sr1 and not int.
-  --   "0" WHEN OTHERS;
-
   sr1_used <=
     "1" WHEN oper = alu_op ELSE
     "1" WHEN oper = out_op ELSE
@@ -151,8 +128,13 @@ BEGIN
     "1" WHEN oper = int_cal_op AND func = cal_func ELSE
     "0";
 
-  WITH oper SELECT
-    sr2_used <=
-    "0" WHEN OTHERS;
+  sr2_used <=
+    "1" WHEN oper = alu_op AND func = and_func ELSE
+    "1" WHEN oper = alu_op AND func = add_func ELSE
+    "1" WHEN oper = alu_op AND func = sub_func ELSE
+    "1" WHEN oper = iadd_op ELSE
+    "1" WHEN oper = ldd_op ELSE
+    "1" WHEN oper = std_op ELSE
+    "0";
 
 END ARCHITECTURE;

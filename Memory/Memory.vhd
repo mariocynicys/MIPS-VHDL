@@ -6,6 +6,8 @@ ENTITY MemoryStage IS
   PORT (
     clk                  : IN STD_LOGIC;
     rst                  : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    -- wrt_data: rsrc1
+    -- addr: output from the alu
     wrt_data, addr       : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     mr, mw, ps_pp, pc_op : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     func                 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -35,7 +37,7 @@ BEGIN
   WITH mr SELECT
     wb_data <=
     mr_adr0 WHEN "1",
-    wrt_data WHEN OTHERS;
+    addr WHEN OTHERS;
 
   -- the address to work with in the ram.
   WITH ps_pp & mr & mw SELECT
@@ -46,7 +48,7 @@ BEGIN
     -- reading is normal, we read from the same block.
     stack_reg WHEN "110",
     -- that's for immediate addressing.
-    "0000000000000000" & addr WHEN OTHERS;
+    x"0000" & addr WHEN OTHERS;
 
   -- lower 16-bit of memory write data.
   WITH pc_op SELECT
