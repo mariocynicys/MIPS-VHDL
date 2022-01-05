@@ -4,6 +4,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 ENTITY ExecuteStage IS
   PORT (
     clk                : IN STD_LOGIC;
+    rst                : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     alu_en             : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     branch             : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     intcal             : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
@@ -76,14 +77,16 @@ BEGIN
   PROCESS (clk)
   BEGIN
     IF falling_edge(clk) THEN
-      IF mem_flgs_en = "1" THEN
+      IF rst = "1" THEN
+        flgs <= "000";
+      ELSIF mem_flgs_en = "1" THEN
         -- this is when the memory requests to store these flags on the alu.
         -- happens with rti instruction.
         flgs <= mem_flgs;
       ELSIF alu_en = "1" THEN
         flgs <= n & z & c;
       ELSIF branch = "1" THEN
-        flgs <= flgs and not flgs_and_func;
+        flgs <= flgs AND NOT flgs_and_func;
       END IF;
     END IF;
   END PROCESS;
