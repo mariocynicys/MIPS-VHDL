@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os.path
 
 TMPL = '''
 LIBRARY IEEE;
@@ -11,6 +12,8 @@ ENTITY {0} IS
     clk : IN STD_LOGIC;
     fsh : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
 {1}
+    rst_in      : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    rst_out     : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
   );
 END ENTITY;
 
@@ -19,10 +22,12 @@ BEGIN
   PROCESS (clk)
   BEGIN
     IF rising_edge(clk) THEN
-      IF fsh = "1" THEN
+      IF fsh = "1" or rst_out = "1" THEN
 {2}
+        rst_out <= "0";
       ELSE
 {3}
+        rst_out <= rst_in;
       END IF;
     END IF;
   END PROCESS;
@@ -30,9 +35,9 @@ END ARCHITECTURE;
 '''
 
 PORT_ARG_TMPL = '{0}_in : IN STD_LOGIC_VECTOR( {1}  DOWNTO 0);\n' + \
-                '{0}_out : OUT STD_LOGIC_VECTOR( {1}  DOWNTO 0)'
+                '{0}_out : OUT STD_LOGIC_VECTOR( {1}  DOWNTO 0);'
 
-input_file_name = sys.argv[1]
+input_file_name = os.path.join(os.path.dirname(__file__), sys.argv[1])
 output_file_name_no_ext = input_file_name.split('.')[0]
 
 port_args = []
@@ -49,8 +54,8 @@ with open(input_file_name) as file:
     proc_body.append('{0}_out <= {0}_in;'.format(port_name))
 
 with open(output_file_name_no_ext + '.vhd', 'w') as file:
-  file.write(TMPL.format(output_file_name_no_ext,
-                         ';\n'.join(port_args),
+  file.write(TMPL.format(output_file_name_no_ext.split('/')[-1],
+                         '\n'.join(port_args),
                          '\n'.join(flush_body),
                          '\n'.join(proc_body)))
     

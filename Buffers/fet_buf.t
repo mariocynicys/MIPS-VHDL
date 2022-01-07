@@ -17,16 +17,23 @@ mw
 
 brn # branchie
 
-pus_pop_en # this signal is for push and pop together.
+ps_pp # this signal is for push and pop together.
 
 wb # write back.
+out_en # = the first op goes directly to the output port.
 
 dst: 3 # you know what that is.
 sr1: 3 # you know what that is.
 sr2: 3 # you know what that is.
 
 pc: 32
+# The in port is at the fetch stage and its value passed to the registerread
+# stage through the buffers. This way we can change the value of the in port
+# without affecting the instructions passed the fetch stage.
+inn: 16
 imm: 16
+
+
 # this signals passes all the processor, as some stages perform some operations
 # when they encouter a reset signal(like reseting the stack pointer).
-rst
+# rst ; this is not needed any more as it is generated be default for any buffer.
