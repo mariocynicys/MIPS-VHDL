@@ -4,8 +4,8 @@ USE IEEE.numeric_std.ALL;
 
 ENTITY MemoryStage IS
   PORT (
-    clk                  : IN STD_LOGIC;
-    rst                  : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    clk : IN STD_LOGIC;
+    rst : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     -- wrt_data: rsrc1
     -- addr: output from the alu
     wrt_data, addr       : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -17,9 +17,11 @@ ENTITY MemoryStage IS
 
     wb_data : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
 
-    set_pc, set_flgs : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-    new_pc           : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    new_flgs         : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+    set_flgs : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    new_flgs : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+    set_pc : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    new_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 
     ex2    : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
     exp_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
@@ -83,12 +85,6 @@ BEGIN
     VARIABLE stack_reg_var : STD_LOGIC_VECTOR(31 DOWNTO 0);
   BEGIN
     IF rising_edge(clk) THEN
-      -- reset the stack.
-      IF rst = "1" THEN
-        stack_reg <= x"00010000";
-        ex2       <= "0";
-      END IF;
-
       IF ps_pp = "1" THEN
         stack_reg_var := stack_reg;
         IF mr = "1" THEN
@@ -105,11 +101,32 @@ BEGIN
           END IF;
         END IF;
         stack_reg <= stack_reg_var;
-        IF stack_reg_var > x"000100000" THEN
-          ex2    <= "1";
-          exp_pc <= pc;
+      END IF;
+    ELSIF falling_edge(clk) THEN
+      -- reset the stack.
+      IF rst = "1" THEN
+        stack_reg <= x"00010000";
+        ex2       <= "0";
+      END IF;
+      -- assure that the stack operation requested is permitted.
+      IF ps_pp = "1" THEN
+        stack_reg_var := stack_reg;
+        IF mr = "1" THEN
+          IF pc_op = "1" THEN
+            stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) + 2);
+          ELSE
+            stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) + 1);
+          END IF;
+          -- pre-checking on the stack register at the falling edge allows us
+          -- to raise the exception early enough if there is any, so that we
+          -- can flush the after memory buffer at the next rising edge.
+          IF stack_reg_var > x"000100000" THEN
+            ex2    <= "1";
+            exp_pc <= pc;
+          END IF;
         END IF;
       END IF;
+      ---
     END IF;
   END PROCESS;
 

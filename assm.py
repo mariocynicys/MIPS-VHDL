@@ -16,11 +16,11 @@ OPCODES = {
   'hlt' : '0000' '001' 'xxx' 'xxx' 'xxx',
   # NOTE: RST should not appear in the code, it is only a signal.
   'rst' : '0000' '010' 'xxx' 'xxx' 'xxx',
+  # NOTE: C01 & C02 are classes for ALU operations.
+  # The 000 function code is reserved for the move no operation (pass the first operand).
   #C01
   'setc': '0001' '001' 'xxx' 'xxx' 'xxx',
   #C02
-  # NOTE: MOV has it's operands swapped.
-  'mov' : '0010' '000' '2nd' '1st' 'xxx',
   'not' : '0010' '010' '1st' '1st' 'xxx',
   'and' : '0010' '011' '1st' '2nd' '3rd',
   'add' : '0010' '100' '1st' '2nd' '3rd',
@@ -39,12 +39,12 @@ OPCODES = {
   'jz'  : '0111' '100' 'xxx' '1st' 'xxx',
   'jn'  : '0111' '010' 'xxx' '1st' 'xxx',
   'jc'  : '0111' '001' 'xxx' '1st' 'xxx',
-  # NOTE: Unused class.
   #C08
-  'emp1': '1000' 'xxx' 'xxx' 'xxx' 'xxx',
+  # NOTE: MOV has it's operands swapped.
+  'mov' : '0010' '000' '2nd' '1st' 'xxx',
   # NOTE: Unused class.
   #C09
-  'emp2': '1001' 'xxx' 'xxx' 'xxx' 'xxx',
+  'emp1': '1001' 'xxx' 'xxx' 'xxx' 'xxx',
   #C10
   'int' : '1010' '000' 'iii' 'iii' 'iii', # The 9(i)s are replaced with the index.
   'call': '1010' '001' 'xxx' '1st' 'xxx',
@@ -66,7 +66,6 @@ OPCODES = {
 
 OPCODES.pop('rst')
 OPCODES.pop('emp1')
-OPCODES.pop('emp2')
 
 class Block:
   addr: int = 0
@@ -181,7 +180,7 @@ def main():
                       help='The delimiter to insert between each two memory words.')
   parser.add_argument('-p', '--print-code-blocks',
                       action='store_true',
-                      help='Prints the info and content about the code blocks found'
+                      help='Prints the info and content of the code blocks found'
                       ' in the assembly code.')
   args = parser.parse_args()
 
@@ -192,28 +191,30 @@ def main():
   print_blocks = args.print_code_blocks
 
   # Capture the whole file without comments as stripped lines.
-  lines = [line.split(';', 1)[0].strip() for line in input.readlines()]
+  lines = [line.split(';')[0].strip() for line in input.readlines()]
   # Capture each instruction as a list.
   instructions = [line.lower().replace(',', ' ').split()
                   for line in lines if line]
   # Define code blocks and parse the instructions.
   index = 0
   while index < len(instructions):
-    if instructions[index][0].startswith(tuple(blocks.keys())):
-      # Block name without the colon.
-      block_name = instructions[index][0][:-1]
+    block_line = ''.join(instructions[index]).replace(' ', '')
+    block_name = block_line.split(':', 1)[0]
+    # Block name and address.
+    if block_name.startswith(tuple(blocks.keys())):
+      block_addr = block_line.split(':', 1)[1]
       # Default stopper and write back address for functions.
-      stopper = 'ret'
-      wadr = None
+      stopper, wadr = 'ret',  None
       # Blocks other than functions can't be defined twice, and have different stopper.
       if not block_name.startswith('func'):
-        assert isinstance(blocks[block_name], Block)
+        assert isinstance(blocks.get(block_name), Block), \
+          f'{block_name} is not a valid block name.'
         assert not blocks[block_name].code, f'{block_name} is already defined.'
         stopper = blocks[block_name].stopper
         wadr = blocks[block_name].wadr
       # Create a new code block.
-      code_block = Block(addr=int(instructions[index][1], 16),
-                         name=block_name, stopper=stopper, wadr=wadr)
+      code_block = Block(addr=int(block_addr, 16), name=block_name,
+                         stopper=stopper, wadr=wadr)
       index += 1
       while True:
         code_block.code.extend(convert(instructions[index], oform))

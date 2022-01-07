@@ -39,6 +39,7 @@ ARCHITECTURE ControlUnitArch OF ControlUnit IS
   CONSTANT ldd_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1110";
   CONSTANT std_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1111";
   CONSTANT jmp_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0111";
+  CONSTANT mov_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1000";
   -------------------------------------------------------------
   -- func codes:
   CONSTANT cal_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "001";
@@ -85,6 +86,7 @@ BEGIN
 
   WITH oper SELECT
     wb <=
+    "1" WHEN mov_op,
     "1" WHEN alu_op,
     "1" WHEN iadd_op,
     "1" WHEN in_op,

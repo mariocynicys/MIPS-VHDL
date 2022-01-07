@@ -4,7 +4,7 @@ alu_en # should the alu work?, this affects the flags.
 
 # this is for call and int instructions together.
 # this signal is also fired for ret and rti instructions.
-cal_int
+int_cal
 
 in_en # = the first op to the alu is the 16-bit value from the in port.
 imm_en # = the first op to the alu is the 16-bit imm value.

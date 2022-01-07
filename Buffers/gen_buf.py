@@ -33,8 +33,8 @@ BEGIN
 END ARCHITECTURE;
 '''
 
-PORT_ARG_TMPL = '{0}_in : IN STD_LOGIC_VECTOR( {1}  DOWNTO 0);\n' + \
-                '{0}_out : OUT STD_LOGIC_VECTOR( {1}  DOWNTO 0);'
+PORT_ARG_TMPL = '{0}_in : IN STD_LOGIC_VECTOR({1}  DOWNTO 0);\n' + \
+                '{0}_out : OUT STD_LOGIC_VECTOR({1}  DOWNTO 0);'
 
 input_file_name = os.path.join(os.path.dirname(__file__), sys.argv[1])
 output_file_name_no_ext = input_file_name.split('.')[0]

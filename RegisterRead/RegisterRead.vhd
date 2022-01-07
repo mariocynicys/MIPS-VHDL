@@ -3,14 +3,13 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY RegisterReadStage IS
   PORT (
-    clk           : IN STD_LOGIC;
-    wr_en         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    wdt           : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    sr1, sr2, dst : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-    im_en, in_en  : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    imm, inn      : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    op1, op2      : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    rsr1          : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    clk            : IN STD_LOGIC;
+    wr_en          : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    wdt            : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    sr1, sr2, dst  : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    im_en, in_en   : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    imm, inn       : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    rsr1, op1, op2 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
 END ENTITY;
 
