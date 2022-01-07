@@ -6,6 +6,7 @@ ENTITY ALU IS
   PORT (
     func     : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     op1, op2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    o_c      : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     res      : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     z, n, c  : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
   );
@@ -23,14 +24,15 @@ BEGIN
   -- handled in the EXE stage and not inside the ALU.
   mov_o <= "0" & (op1);
   set_c <= "1" & (one);
-  not_o <= "0" & (NOT op1);
-  and_o <= "0" & (op1 AND op2);
+  -- For NOT and AND, we wanna use the old carry `o_c`.
+  not_o <= o_c & (NOT op1);
+  and_o <= o_c & (op1 AND op2);
   add_o <= STD_LOGIC_VECTOR(resize(UNSIGNED(op1) + UNSIGNED(op2), 17));
   sub_o <= STD_LOGIC_VECTOR(resize(UNSIGNED(op1) - UNSIGNED(op2), 17));
   inc_o <= STD_LOGIC_VECTOR(resize(UNSIGNED(op1) + UNSIGNED(one), 17));
 
   WITH func SELECT
-  res_o <=
+    res_o <=
     set_c WHEN "001",
     not_o WHEN "010",
     and_o WHEN "011",

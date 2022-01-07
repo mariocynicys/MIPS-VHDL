@@ -6,7 +6,7 @@ ENTITY ExecuteStage IS
     clk            : IN STD_LOGIC;
     rst            : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     alu_en         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    branch         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    brn            : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     intcal         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     in_imm         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     func           : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -36,13 +36,13 @@ ARCHITECTURE ExecuteStageArch OF ExecuteStage IS
   SIGNAL flgs_and_func    : STD_LOGIC_VECTOR(2 DOWNTO 0);
 BEGIN
 
-  alu : ENTITY work.ALU PORT MAP(func, alu_op1, alu_op2, result, z, n, c);
+  alu : ENTITY work.ALU PORT MAP(func, alu_op1, alu_op2, flgs(0 DOWNTO 0), result, z, n, c);
   frw : ENTITY work.Forwarder PORT MAP(sr1, sr2, wb_alu, dst_alu, wb_mem, dst_mem, fsr1, fsr2);
 
   new_pc        <= x"0000" & frsr1;
-  flgs_and_func <= flgs AND func;
+  flgs_and_func <= flgs AND func AND (brn & brn & brn);
 
-  WITH branch & func SELECT
+  WITH brn & func SELECT
   is_jmp <=
     "1" WHEN "1000",
     "0" WHEN OTHERS;
@@ -88,7 +88,7 @@ BEGIN
         flgs <= mem_flgs;
       ELSIF alu_en = "1" THEN
         flgs <= z & n & c;
-      ELSIF branch = "1" THEN
+      ELSIF brn = "1" THEN
         flgs <= flgs AND NOT flgs_and_func;
       END IF;
     END IF;
