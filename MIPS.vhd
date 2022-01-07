@@ -73,7 +73,7 @@ BEGIN
     FB_rst, BR_rst
     );
   ---
-  registerread_stage : ENTITY work.RegisterRead PORT MAP(clk,
+  registerread_stage : ENTITY work.RegisterReadStage PORT MAP(clk,
     WR_wb, WR_wd,
     BR_sr1, BR_sr2, WR_wa,
     BR_im, BR_in,
