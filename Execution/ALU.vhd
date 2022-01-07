@@ -16,7 +16,11 @@ ARCHITECTURE ALUArch OF ALU IS
   SIGNAL mov_o, not_o, and_o, add_o : STD_LOGIC_VECTOR(16 DOWNTO 0);
   SIGNAL sub_o, inc_o, set_c, res_o : STD_LOGIC_VECTOR(16 DOWNTO 0);
 BEGIN
-
+  -- mov_o was here when MOV was an ALU operation. MOV is no longer an
+  -- ALU operation, but the concept still applies. We are gonna move the
+  -- first operand if we have none of the valid ALU operations specified.
+  -- Note that the logic of not altering the flags when doing a MOV is
+  -- handled in the EXE stage and not inside the ALU.
   mov_o <= "0" & (op1);
   set_c <= "1" & (one);
   not_o <= "0" & (NOT op1);

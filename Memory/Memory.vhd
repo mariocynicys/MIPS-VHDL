@@ -85,6 +85,11 @@ BEGIN
     VARIABLE stack_reg_var : STD_LOGIC_VECTOR(31 DOWNTO 0);
   BEGIN
     IF rising_edge(clk) THEN
+      -- reset the stack.
+      IF rst = "1" THEN
+        stack_reg <= x"00010000";
+      END IF;
+      -- update the stack
       IF ps_pp = "1" THEN
         stack_reg_var := stack_reg;
         IF mr = "1" THEN
@@ -103,10 +108,9 @@ BEGIN
         stack_reg <= stack_reg_var;
       END IF;
     ELSIF falling_edge(clk) THEN
-      -- reset the stack.
+      -- reset the ex2 flag.
       IF rst = "1" THEN
-        stack_reg <= x"00010000";
-        ex2       <= "0";
+        ex2 <= "0";
       END IF;
       -- assure that the stack operation requested is permitted.
       IF ps_pp = "1" THEN
