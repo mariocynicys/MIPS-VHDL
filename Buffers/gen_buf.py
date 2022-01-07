@@ -3,8 +3,7 @@
 import sys
 import os.path
 
-TMPL = '''
-LIBRARY IEEE;
+TMPL = '''LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY {0} IS
