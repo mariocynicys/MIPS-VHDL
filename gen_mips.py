@@ -3,7 +3,7 @@ import os.path
 import os
 
 
-VHDL_DIRS = ['FetchDecode', 'RegisterRead', 'Execution',
+VHDL_DIRS = ['.' ,'FetchDecode', 'RegisterRead', 'Execution',
              'Memory', 'WriteBack', 'Buffers',]
 
 PROJECT_DIR = os.path.dirname(__file__)

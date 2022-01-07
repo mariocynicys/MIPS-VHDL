@@ -52,7 +52,7 @@ BEGIN
 
   --fetch_stage: entity work.fetch port map();
   ---
-  fetch_buf : ENTITY work.buf_fet PORT MAP(clk, F_flsh,
+  fetch_buf : ENTITY work.fet_buf PORT MAP(clk, F_flsh,
     FB_func, BR_func,
     FB_alu, BR_alu,
     FB_int_cal, BR_int_cal,
@@ -73,8 +73,7 @@ BEGIN
     FB_rst, BR_rst
     );
   ---
-  registerread_stage : ENTITY work.ExecuteStage PORT MAP(clk,
-    BR_rst,
+  registerread_stage : ENTITY work.RegisterRead PORT MAP(clk,
     WR_wb, WR_wd,
     BR_sr1, BR_sr2, WR_wa,
     BR_im, BR_in,

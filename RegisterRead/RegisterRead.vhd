@@ -1,8 +1,8 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
--- The DecodeStage File
-ENTITY DecodeStage IS
+-- The RegisterRead File
+ENTITY RegisterRead IS
   PORT (
     clk           : IN STD_LOGIC;
     wr_en         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
@@ -15,7 +15,7 @@ ENTITY DecodeStage IS
   );
 END ENTITY;
 
-ARCHITECTURE DecodeStageArch OF DecodeStage IS
+ARCHITECTURE RegisterReadArch OF RegisterRead IS
 BEGIN
   rf : ENTITY work.RegisterFile PORT MAP(clk, wr_en, wdt, sr1, sr2, dst, rsr1, op2);
   WITH im_en & in_en SELECT
