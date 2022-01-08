@@ -18,15 +18,19 @@ Push R4   # sp=FFFFFFFE, M[FFFFFFFF]=300
 INT 2     # SP=FFFFFFFC, M[FFFFFFFD]=half next PC,M[FFFFFFFE]=other half next PC
 JMP R1 
 INC R1	  # this statement shouldn't be executed
- 
+hlt
+
 # check flag fowarding  
 ;.ORG 30 what is thiis??
+func1: 30
 AND R5,R1,R5   # R5=0 , Z = 1
 JZ  R2      # Jump taken, Z = 0
 SETC        # this statement shouldn't be executed, C-->1
+ret
 
 # check on flag updated on jump
 ;.ORG 50 what is this???????
+func2: 50
 JZ R1      # shouldn't be taken
 JC R3      # Jump Not taken
 
@@ -36,10 +40,10 @@ INT 0      # SP=FFFFFFFC, M[FFFFFFFD]=half next PC,M[FFFFFFFE]=other half next P
 IN  R6     # R6=700, flag no change
 JN  R6     # jump taken, N = 0
 INC R1     # this statement shouldn't be executed
-hlt ; end of main
+ret ; end of main
 
 # check on load use
-func7: 700
+func3: 700
 SETC      # C-->1
 POP R6    # R6=300, SP=FFFFFFFF
 Call R6   # SP=FFFFFFFD, M[FFFFFFFE]=half next PC,M[FFFFFFFF]=other half next PC
@@ -48,7 +52,7 @@ NOP
 NOP
 ret # you need to return
 
-func3: 300
+func4: 300
 ADD R6,R3,R6 # R6=400
 ADD R1,R1,R2 # R1=80, C->0,N=0, Z=0
 RET

@@ -211,7 +211,7 @@ def main():
         stopper = blocks[block_name].stopper
         wadr = blocks[block_name].wadr
       # Create a new code block.
-      code_block = Block(addr=int(block_addr, 16), name=block_name,
+      code_block = Block(addr=int(block_addr, 0), name=block_name,
                          stopper=stopper, wadr=wadr)
       index += 1
       while True:
@@ -237,10 +237,10 @@ def main():
       code_blocks.extend(block)
   # Assert the blocks comply with the constrains.
   for block1 in code_blocks:
-    assert block1.addr + len(block1.code) < MAX_MEM_SIZ, (
-      f'{block1.name} is exceeding the memory size.')
-    assert block1.addr > RES_MEM_TIL, (
-      f'{block1.name} starts from address {block1.addr} which is reserved')
+    assert block1.addr + len(block1.code) <= MAX_MEM_SIZ, \
+      f'{block1.name} is exceeding the memory size.'
+    assert block1.addr >= RES_MEM_TIL, \
+      f'{block1.name} starts from address {block1.addr} which is reserved'
     for block2 in code_blocks:
       if block1 != block2:
         assert not bool(set(range(block1.addr, block1.addr + len(block1.code))) &

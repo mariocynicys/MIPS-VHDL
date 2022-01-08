@@ -35,7 +35,7 @@ ENTITY FetchStage IS
     e_setpc : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     e_newpc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     e_hispc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    -- for rets
+    -- for rets and rtis
     m_setpc : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     m_newpc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     m_hispc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -65,6 +65,8 @@ ARCHITECTURE FetchStageArch OF FetchStage IS
   CONSTANT HLTING : INTEGER := 0;
   CONSTANT OPNORM : INTEGER := 1;
   CONSTANT DBJING : INTEGER := 2;
+  -- Note that being on HLTING or DBJING forces the CU to output zeros.
+  -- That's why you won't see me using f_flsh in this code.
   SIGNAL state    : INTEGER := HLTING;
   --------------------------------------------------------------
   CONSTANT MAXPC : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"000000FF";
@@ -102,6 +104,9 @@ BEGIN
     );
   --
   PROCESS (clk)
+    -- when this variable is set, this process will not enter the
+    -- OPNORM state. This means that there is some BIG BOSS action
+    -- occured and took over the normal execution.
     VARIABLE not_norm_anymore : STD_LOGIC_VECTOR(0 DOWNTO 0);
   BEGIN
     IF falling_edge(clk) THEN
@@ -115,11 +120,15 @@ BEGIN
       e_flsh <= "0";
       m_flsh <= "0";
       -------------------------------------------------------
+      -- BIG BOSSES i.e. they don't give a fuck to the state i.e. operate in any state.
       not_norm_anymore := rst OR m_setex OR m_setpc OR e_setpc OR f_setex;
       IF rst = "1" THEN
         -- first check for a rst signal.
-        state <= DBJING;
-        pc    <= main;
+        state  <= DBJING;
+        pc     <= main;
+        r_flsh <= "1";
+        e_flsh <= "1";
+        m_flsh <= "1";
       ELSIF m_setex = "1" THEN
         -- check for exception 2, it should be served first.
         pc     <= exp2;
@@ -129,7 +138,7 @@ BEGIN
         e_flsh <= "1";
         m_flsh <= "1";
       ELSIF m_setpc = "1" THEN
-        -- check for rti/ret
+        -- check for rti/ret.
         IF m_newpc > MAXPC THEN
           f_setex <= "1";
           f_expc  <= m_hispc;

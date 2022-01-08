@@ -11,7 +11,7 @@ ENTITY MIPS IS
 END ENTITY;
 ARCHITECTURE MIPSArch OF MIPS IS
   CONSTANT clk_prd : TIME      := 100 ps;
-  SIGNAL clk       : STD_LOGIC := '0';
+  SIGNAL clk       : STD_LOGIC := '1';
   SIGNAL rst       : STD_LOGIC_VECTOR(0 DOWNTO 0);
   ------------------------------------
   -- F = FetchDecodeStage
