@@ -3,8 +3,13 @@ import os.path
 import os
 
 
-VHDL_DIRS = ['.' ,'FetchDecode', 'RegisterRead', 'Execution',
-             'Memory', 'WriteBack', 'Buffers',]
+VHDL_DIRS = ['FetchDecode',
+             'RegisterRead',
+             'Execution',
+             'Memory',
+             'WriteBack',
+             'Buffers',
+             '.',]
 
 PROJECT_DIR = os.path.dirname(__file__)
 
@@ -14,6 +19,7 @@ def main():
            for vhdl in os.listdir(os.path.join(PROJECT_DIR, vhdl_dir))
            if vhdl.endswith(('.vhd', '.vhdl'))]
 
+  vhdls.sort()
   vhdl_count = FILE_COUNT.format(len(vhdls))
   vhdl_files = '\n'.join([NEW_FILE.format(i, vhdl)
                           for (i, vhdl) in enumerate(vhdls)])

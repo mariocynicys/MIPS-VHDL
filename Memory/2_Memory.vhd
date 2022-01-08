@@ -30,7 +30,7 @@ END ENTITY;
 
 ARCHITECTURE MemoryStageArch OF MemoryStage IS
   SIGNAL stack_reg                          : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00010000";
-  SIGNAL adr                                : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL adr                                : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
   SIGNAL mw_adr0, mw_adr1, mr_adr0, mr_adr1 : STD_LOGIC_VECTOR(15 DOWNTO 0);
 BEGIN
   ram : ENTITY work.ram PORT MAP (clk, adr, mw, pc_op, mw_adr0, mw_adr1, mr_adr0, mr_adr1);

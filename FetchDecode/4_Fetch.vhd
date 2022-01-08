@@ -23,7 +23,7 @@ ENTITY FetchStage IS
     cu_sr1     : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     cu_sr2     : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     -- outputs
-    pc  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    pc  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
     inn : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     imm : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     rst : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
@@ -67,7 +67,7 @@ ARCHITECTURE FetchStageArch OF FetchStage IS
   CONSTANT DBJING : INTEGER := 2;
   -- Note that being on HLTING or DBJING forces the CU to output zeros.
   -- That's why you won't see me using f_flsh in this code.
-  SIGNAL state    : INTEGER := HLTING;
+  SIGNAL state : INTEGER := HLTING;
   --------------------------------------------------------------
   CONSTANT MAXPC : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"000000FF";
 
@@ -124,8 +124,10 @@ BEGIN
       not_norm_anymore := rst OR m_setex OR m_setpc OR e_setpc OR f_setex;
       IF rst = "1" THEN
         -- first check for a rst signal.
-        state  <= DBJING;
-        pc     <= main;
+        state <= DBJING;
+        pc    <= main;
+        -- note that we don't wanna flush the after fetch buffer because we
+        -- want the reset signal to propagte through the pipelines.
         r_flsh <= "1";
         e_flsh <= "1";
         m_flsh <= "1";
