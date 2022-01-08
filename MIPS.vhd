@@ -5,7 +5,8 @@ ENTITY MIPS IS
   PORT (
     reset    : IN STD_LOGIC;
     in_port  : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    out_port : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    out_port : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    epc      : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END ENTITY;
 ARCHITECTURE MIPSArch OF MIPS IS
@@ -82,10 +83,38 @@ ARCHITECTURE MIPSArch OF MIPS IS
 BEGIN
   -- Update the clk.
   clk <= NOT clk AFTER clk_prd / 2;
-  rst <= rst;
-
   ---
-  --fetch_stage: entity work.FetchStage port map();
+  fetch_stage : ENTITY work.FetchStage PORT MAP(clk,
+    (0 => reset),
+    in_port,
+    -- outputs
+    FB_func,
+    FB_alu,
+    FB_int_cal,
+    FB_in,
+    FB_im,
+    FB_mr,
+    FB_mw,
+    FB_brn,
+    FB_ps_pp,
+    FB_wb,
+    FB_out,
+    FB_dst,
+    FB_sr1,
+    FB_sr2,
+    FB_pc,
+    FB_inn,
+    FB_imm,
+    FB_rst,
+    epc,
+    -- back to fetch
+    BE_dst, BE_wb, BE_mr,      -- for load use
+    EF_setpc, EF_newpc, BE_pc, -- jumps and cals
+    MF_setpc, MF_newpc, BM_pc, -- rets and rtis
+    MF_setex, MF_expc,         -- sp exp
+    -- flush outs
+    F_flsh, R_flsh, E_flsh, M_flsh
+    );
   ---
   fetch_buf : ENTITY work.FetBuf PORT MAP(clk, F_flsh,
     FB_func, BR_func,
@@ -197,9 +226,12 @@ BEGIN
     MF_setex, MF_expc
     );
   ---
-  -- We will only need flush the after memory buffer when exception 2 occurs.
-  M_flsh <= MF_setex;
-  memory_buffer : ENTITY work.MemBuf PORT MAP(clk, M_flsh,
+  -- We will need to flush the after memory buffer when ex2 occurs.
+  -- This is to stop the instruction causing the exception from
+  -- writing back, because the fetch stage will know about the exception
+  -- one cycle later and will have no time to stop the faulty instruction
+  -- in the after memory buffer.
+  memory_buffer : ENTITY work.MemBuf PORT MAP(clk, M_flsh OR MF_setex,
     MB_wd, BW_wd,
     -- pass
     BM_wb, BW_wb,

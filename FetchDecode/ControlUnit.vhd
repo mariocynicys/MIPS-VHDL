@@ -1,11 +1,9 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.numeric_std.ALL;
-USE IEEE.math_real.ALL;
 
 ENTITY ControlUnit IS
   PORT (
-    operation          : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+    instruction        : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     func               : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     wb                 : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
     inn                : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
@@ -17,7 +15,14 @@ ENTITY ControlUnit IS
     ps_pp              : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
     brnch              : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
     int_cal            : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-    sr1_used, sr2_used : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+    sr1_used, sr2_used : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    dst                : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+    sr1                : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+    sr2                : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+    hlt                : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    int                : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    -- If not nop is false, we will output the nop signals (stall).
+    not_nop : IN BOOLEAN
   );
 END ENTITY;
 
@@ -27,6 +32,7 @@ ARCHITECTURE ControlUnitArch OF ControlUnit IS
 
   -------------------------------------------------------------
   -- class codes:
+  CONSTANT nop_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
   CONSTANT in_op      : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0100";
   CONSTANT out_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0011";
   CONSTANT alu_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0010";
@@ -42,15 +48,19 @@ ARCHITECTURE ControlUnitArch OF ControlUnit IS
   CONSTANT mov_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1000";
   -------------------------------------------------------------
   -- func codes:
+  CONSTANT hlt_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "001";
+  CONSTANT int_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "000";
   CONSTANT cal_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "001";
   CONSTANT and_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "011";
   CONSTANT add_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "100";
   CONSTANT sub_func : STD_LOGIC_VECTOR(2 DOWNTO 0) := "101";
   -------------------------------------------------------------
 BEGIN
-
-  oper <= operation(6 DOWNTO 3);
-  func <= operation(2 DOWNTO 0);
+  oper <= instruction(15 DOWNTO 12) WHEN not_nop ELSE (OTHERS => '0');
+  func <= instruction(11 DOWNTO 9) WHEN not_nop ELSE (OTHERS  => '0');
+  dst  <= instruction(8 DOWNTO 6) WHEN not_nop ELSE (OTHERS   => '0');
+  sr1  <= instruction(5 DOWNTO 3) WHEN not_nop ELSE (OTHERS   => '0');
+  sr2  <= instruction(2 DOWNTO 0) WHEN not_nop ELSE (OTHERS   => '0');
 
   WITH oper SELECT
     imm <=
@@ -139,4 +149,15 @@ BEGIN
     "1" WHEN oper = std_op ELSE
     "0";
 
+  -- used only by the fetch, doesn't propagate.
+  WITH oper & func SELECT
+  hlt <=
+    "1" WHEN nop_op & hlt_func,
+    "0" WHEN OTHERS;
+
+  -- used only by the fetch, doesn't propagate.
+  WITH oper & func SELECT
+  int <=
+    "1" WHEN int_cal_op & cal_func,
+    "0" WHEN OTHERS;
 END ARCHITECTURE;

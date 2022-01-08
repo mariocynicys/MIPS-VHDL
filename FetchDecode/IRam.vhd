@@ -15,6 +15,6 @@ ARCHITECTURE IRamArch OF IRam IS
   TYPE ram_type IS ARRAY(0 TO 2 ** 20 - 1) OF STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL ram : ram_type;
 BEGIN
-  instruction <= ram(to_integer(unsigned(pc)));
-  immediate   <= ram(to_integer(unsigned(pc) + 1));
+  instruction <= ram(to_integer(resize(unsigned(pc), 20)));
+  immediate   <= ram(to_integer(resize(unsigned(pc) + 1, 20)));
 END ARCHITECTURE;

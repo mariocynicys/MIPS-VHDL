@@ -105,13 +105,15 @@ BEGIN
             stack_reg_var := STD_LOGIC_VECTOR(UNSIGNED(stack_reg) - 1);
           END IF;
         END IF;
-        stack_reg <= stack_reg_var;
+        -- We will only allow the new stack to be stored
+        -- if it didn't raise an exception.
+        IF ex2 = "0" THEN
+          stack_reg <= stack_reg_var;
+        END IF;
       END IF;
     ELSIF falling_edge(clk) THEN
-      -- reset the ex2 flag.
-      IF rst = "1" THEN
-        ex2 <= "0";
-      END IF;
+      -- reset the ex2 signal.
+      ex2 <= "0";
       -- assure that the stack operation requested is permitted.
       IF ps_pp = "1" THEN
         stack_reg_var := stack_reg;

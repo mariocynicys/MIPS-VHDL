@@ -22,18 +22,18 @@ BEGIN
   PROCESS (clk) IS
   BEGIN
     IF falling_edge(clk) AND mw = "1" THEN
-      inner_ram(to_integer(resize(unsigned(adr), 16))) <= mw_adr0;
+      inner_ram(to_integer(resize(unsigned(adr), 20))) <= mw_adr0;
       IF dbl_op = "1" THEN
-        inner_ram(to_integer(resize(unsigned(adr) - 1, 16))) <= mw_adr1;
+        inner_ram(to_integer(resize(unsigned(adr) - 1, 20))) <= mw_adr1;
       END IF;
     END IF;
   END PROCESS;
   -- Having the reading outside the process makes the data read ready by
   -- the falling edge of this cycle, thus can be used by other processes
   -- in the alu(flags) and the fetch(new pc).
-  mr_adr0 <= inner_ram(to_integer(resize(unsigned(adr), 16)));
+  mr_adr0 <= inner_ram(to_integer(resize(unsigned(adr), 20)));
   WITH dbl_op SELECT
     mr_adr1 <=
-    inner_ram(to_integer(resize(unsigned(adr) + 1, 16))) WHEN "1",
+    inner_ram(to_integer(resize(unsigned(adr) + 1, 20))) WHEN "1",
     "0000000000000000" WHEN OTHERS;
 END ARCHITECTURE;

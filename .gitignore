@@ -1,5 +1,6 @@
 *.bak
 *.bin
+*.mem
 work
 .mypy_cache
 *.wlf

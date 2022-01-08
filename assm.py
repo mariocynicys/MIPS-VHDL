@@ -14,8 +14,6 @@ OPCODES = {
   #C00
   'nop' : '0000' '000' 'xxx' 'xxx' 'xxx',
   'hlt' : '0000' '001' 'xxx' 'xxx' 'xxx',
-  # NOTE: RST should not appear in the code, it is only a signal.
-  'rst' : '0000' '010' 'xxx' 'xxx' 'xxx',
   # NOTE: C01 & C02 are classes for ALU operations.
   # The 000 function code is reserved for the move no operation (pass the first operand).
   #C01
@@ -64,7 +62,6 @@ OPCODES = {
   'std' : '1111' '100' 'xxx' '1st' '2nd', # Has ADD's Func code
 }
 
-OPCODES.pop('rst')
 OPCODES.pop('emp1')
 
 class Block:
@@ -191,7 +188,8 @@ def main():
   print_blocks = args.print_code_blocks
 
   # Capture the whole file without comments as stripped lines.
-  lines = [line.split(';')[0].strip() for line in input.readlines()]
+  lines = [line.split(';')[0].split('#')[0].strip()
+           for line in input.readlines()]
   # Capture each instruction as a list.
   instructions = [line.lower().replace(',', ' ').split()
                   for line in lines if line]

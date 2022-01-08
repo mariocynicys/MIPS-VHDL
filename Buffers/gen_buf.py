@@ -33,14 +33,14 @@ BEGIN
 END ARCHITECTURE;
 '''
 
-PORT_ARG_TMPL = '{0}_in : IN STD_LOGIC_VECTOR({1}  DOWNTO 0);\n' + \
+PORT_ARG_TMPL = '{0}_in : IN STD_LOGIC_VECTOR({1}  DOWNTO 0) := "{2}";\n' + \
                 '{0}_out : OUT STD_LOGIC_VECTOR({1}  DOWNTO 0);'
 
 input_file_name = os.path.join(os.path.dirname(__file__), sys.argv[1])
 output_file_name_no_ext = input_file_name.split('.')[0]
 
 port_args = []
-flush_body = []
+flsh_body = []
 proc_body = []
 with open(input_file_name) as file:
   lines = [line.strip().replace(' ', '').split(';')[0].split('#')[0].split(':')
@@ -48,13 +48,14 @@ with open(input_file_name) as file:
   lines = [line for line in lines if line[0].strip()]
   for line in lines:
     port_name, bit_count = line if len(line) > 1 else (line[0], '1')
-    port_args.append(PORT_ARG_TMPL.format(port_name, int(bit_count)-1))
-    flush_body.append('{0}_out <= "{1}";'.format(port_name, int(bit_count) * '0'))
+    bit_c = int(bit_count)
+    port_args.append(PORT_ARG_TMPL.format(port_name, bit_c - 1, bit_c * '0'))
+    flsh_body.append('{0}_out <= "{1}";'.format(port_name, bit_c * '0'))
     proc_body.append('{0}_out <= {0}_in;'.format(port_name))
 
 with open(output_file_name_no_ext + '.vhd', 'w') as file:
   file.write(TMPL.format(output_file_name_no_ext.split('/')[-1],
                          '\n'.join(port_args),
-                         '\n'.join(flush_body),
+                         '\n'.join(flsh_body),
                          '\n'.join(proc_body)))
     
