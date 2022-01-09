@@ -146,7 +146,7 @@ BEGIN
     RB_rsr1, RB_op1, RB_op2
     );
   ---
-  registerread_buffer : ENTITY work.RegBuf PORT MAP(clk, R_flsh,
+  registerread_buffer : ENTITY work.RegBuf PORT MAP(clk, R_flsh OR EF_setpc OR MF_setpc,
     RB_rsr1, BE_rsr1,
     RB_op1, BE_op1,
     RB_op2, BE_op2,
@@ -188,7 +188,7 @@ BEGIN
     EF_setpc, EF_newpc
     );
   ---
-  execute_buffer : ENTITY work.ExeBuf PORT MAP(clk, E_flsh,
+  execute_buffer : ENTITY work.ExeBuf PORT MAP(clk, E_flsh OR MF_setpc OR MF_setex,
     EB_rsr1, BM_rsr1,
     EB_result, BM_result,
     EB_flags, BM_flags,

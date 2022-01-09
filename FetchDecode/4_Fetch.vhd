@@ -127,7 +127,7 @@ BEGIN
         state <= DBJING;
         pc    <= main;
         -- note that we don't wanna flush the after fetch buffer because we
-        -- want the reset signal to propagte through the pipelines.
+        -- want the reset signal to propagte through the pipeline.
         r_flsh <= "1";
         e_flsh <= "1";
         m_flsh <= "1";
@@ -144,26 +144,29 @@ BEGIN
         IF m_newpc > MAXPC THEN
           f_setex <= "1";
           f_expc  <= m_hispc;
+          state   <= HLTING; -- any state other than OPNORM to stop the CU
+          m_flsh  <= "1"; -- flush the faulty instruction
         ELSE
-          pc     <= m_newpc;
-          r_flsh <= "1";
-          e_flsh <= "1";
+          pc    <= m_newpc;
+          state <= OPNORM;
         END IF;
       ELSIF e_setpc = "1" THEN
         -- check for jumps and calls.
         IF m_newpc > MAXPC THEN
           f_setex <= "1";
           f_expc  <= e_hispc;
+          state   <= HLTING; -- any state other than OPNORM to stop the CU
+          e_flsh  <= "1"; -- flush the faulty instruction
         ELSE
-          pc     <= e_newpc;
-          r_flsh <= "1";
+          pc    <= e_newpc;
+          state <= OPNORM;
         END IF;
       ELSIF f_setex = "1" THEN
         -- then check for exception 1.
         pc     <= exp1;
         epc    <= f_expc;
         state  <= DBJING;
-        r_flsh <= "1";
+        r_flsh <= "1"; -- this MIGHT be the faulty instruction
       END IF;
       ---------------------------------------------------------
       ---------------------------------------------------------
@@ -198,7 +201,9 @@ BEGIN
           -- if the past instruction wasn't an immediate or had anything special.
           IF cu_int = "1" THEN
             -- check first if the past instruction was an int.
-            pc    <= x"00000" & "000" & cu_dst & cu_sr1 & cu_sr2;
+            pc <= STD_LOGIC_VECTOR(resize(
+              unsigned(x"00000" & "000" & cu_dst & cu_sr1 & cu_sr2) + 6,
+              32));
             state <= DBJING;
           ELSIF STD_LOGIC_VECTOR(unsigned(pc) + 1) > MAXPC THEN
             -- otherwise check that the pc doesn't go past its max.
@@ -213,7 +218,7 @@ BEGIN
         ---------------------------------------------------------
         ---------------------------------------------------------
         ---------------------------------------------------------
-      ELSIF state = DBJING THEN
+      ELSIF state = DBJING AND not_norm_anymore = "0" THEN
         -- move the pc to what is read by the pc.
         -- NOTE: it's not safe to mutate the pc without knowing whether
         -- instruction & imm goes past MAXPC or not, but we are assuming
