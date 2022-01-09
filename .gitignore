@@ -9,7 +9,6 @@ oldies
 zoldies
 *.mti
 *.mpf
-mips.sh
 *.vstf
 bulk.vhd
 Buffers/*.vhd

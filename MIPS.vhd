@@ -3,16 +3,15 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY MIPS IS
   PORT (
-    reset    : IN STD_LOGIC;
-    in_port  : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    out_port : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    epc      : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    reset    : IN STD_LOGIC                      := '0';
+    in_port  : IN STD_LOGIC_VECTOR(15 DOWNTO 0)  := x"0000";
+    out_port : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := x"0000";
+    epc      : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000"
   );
 END ENTITY;
 ARCHITECTURE MIPSArch OF MIPS IS
   CONSTANT clk_prd : TIME      := 100 ps;
   SIGNAL clk       : STD_LOGIC := '1';
-  SIGNAL rst       : STD_LOGIC_VECTOR(0 DOWNTO 0);
   ------------------------------------
   -- F = FetchDecodeStage
   -- R = RegiserReadStage

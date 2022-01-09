@@ -27,7 +27,7 @@ ENTITY FetchStage IS
     inn : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     imm : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     rst : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-    epc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    epc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
     -- for load use
     exe_buf_dst            : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     exe_buf_wb, exe_buf_mr : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
@@ -145,7 +145,7 @@ BEGIN
           f_setex <= "1";
           f_expc  <= m_hispc;
           state   <= HLTING; -- any state other than OPNORM to stop the CU
-          m_flsh  <= "1"; -- flush the faulty instruction
+          m_flsh  <= "1";    -- flush the faulty instruction
         ELSE
           pc    <= m_newpc;
           state <= OPNORM;
@@ -156,7 +156,7 @@ BEGIN
           f_setex <= "1";
           f_expc  <= e_hispc;
           state   <= HLTING; -- any state other than OPNORM to stop the CU
-          e_flsh  <= "1"; -- flush the faulty instruction
+          e_flsh  <= "1";    -- flush the faulty instruction
         ELSE
           pc    <= e_newpc;
           state <= OPNORM;
