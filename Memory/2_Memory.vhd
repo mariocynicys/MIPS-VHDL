@@ -29,7 +29,8 @@ ENTITY MemoryStage IS
 END ENTITY;
 
 ARCHITECTURE MemoryStageArch OF MemoryStage IS
-  SIGNAL stack_reg                          : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00010000";
+  CONSTANT MAXSP                            : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00100000";
+  SIGNAL stack_reg                          : STD_LOGIC_VECTOR(31 DOWNTO 0) := MAXSP;
   SIGNAL adr                                : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
   SIGNAL mw_adr0, mw_adr1, mr_adr0, mr_adr1 : STD_LOGIC_VECTOR(15 DOWNTO 0);
 BEGIN
@@ -87,7 +88,7 @@ BEGIN
     IF rising_edge(clk) THEN
       -- reset the stack.
       IF rst = "1" THEN
-        stack_reg <= x"00010000";
+        stack_reg <= MAXSP;
       END IF;
       -- update the stack
       IF ps_pp = "1" THEN
@@ -126,7 +127,7 @@ BEGIN
           -- pre-checking on the stack register at the falling edge allows us
           -- to raise the exception early enough if there is any, so that we
           -- can flush the after memory buffer at the next rising edge.
-          IF stack_reg_var > x"000100000" THEN
+          IF stack_reg_var > MAXSP THEN
             ex2    <= "1";
             exp_pc <= pc;
           END IF;

@@ -14,7 +14,7 @@ ENTITY ExecuteStage IS
     op1, op2, rsr1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     frsr1          : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     result         : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-    flgs           : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+    flgs           : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := "000";
     wb_alu         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     dst_alu        : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     rsrc_alu       : IN STD_LOGIC_VECTOR(15 DOWNTO 0);

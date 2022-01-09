@@ -1,6 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.numeric_std.ALL;
+USE IEEE.std_logic_unsigned.ALL;
 
 ENTITY ALU IS
   PORT (
@@ -13,9 +13,9 @@ ENTITY ALU IS
 END ENTITY;
 
 ARCHITECTURE ALUArch OF ALU IS
-  SIGNAL o_z, o_n, o_c              : STD_LOGIC;
-  SIGNAL mov_o, not_o, and_o, add_o : STD_LOGIC_VECTOR(16 DOWNTO 0);
-  SIGNAL sub_o, inc_o, set_c, res_o : STD_LOGIC_VECTOR(16 DOWNTO 0);
+  SIGNAL o_z, o_n, o_c              : STD_LOGIC                     := '0';
+  SIGNAL mov_o, not_o, and_o, add_o : STD_LOGIC_VECTOR(16 DOWNTO 0) := "0" & x"0000";
+  SIGNAL sub_o, inc_o, set_c, res_o : STD_LOGIC_VECTOR(16 DOWNTO 0) := "0" & x"0000";
 BEGIN
   o_z <= o_flgs(2);
   o_n <= o_flgs(1);
@@ -31,9 +31,9 @@ BEGIN
   -- For NOT and AND, we wanna use the old carry `o_c`.
   not_o <= o_c & (NOT op1);
   and_o <= o_c & (op1 AND op2);
-  add_o <= STD_LOGIC_VECTOR(to_unsigned(to_integer(UNSIGNED(op1)) + to_integer(UNSIGNED(op2)), 17));
-  sub_o <= STD_LOGIC_VECTOR(to_unsigned(to_integer(UNSIGNED(op1)) - to_integer(UNSIGNED(op2)), 17));
-  inc_o <= STD_LOGIC_VECTOR(to_unsigned(to_integer(UNSIGNED(op1)) + 1, 17));
+  add_o <= ("0" & op1) + ("0" & op2);
+  sub_o <= ("0" & op1) - ("0" & op2);
+  inc_o <= ("0" & op1) + ("0" & x"0001");
 
   WITH func SELECT
     res_o <=

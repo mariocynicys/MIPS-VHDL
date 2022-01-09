@@ -247,7 +247,8 @@ BEGIN
     -- outputs
     WR_we,
     WR_wa,
-    WR_wd
+    WR_wd,
+    out_port
     );
   ---
 END ARCHITECTURE;

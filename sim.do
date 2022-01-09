@@ -13,10 +13,10 @@ add wave -position end sim:/mips/reset
 radix signal sim:/mips/reset bin
 # Add the in port.
 add wave -position end sim:/mips/in_port
-radix signal sim:/mips/in_port dec
+radix signal sim:/mips/in_port hex
 # Add the out port.
 add wave -position end sim:/mips/out_port
-radix signal sim:/mips/out_port dec
+radix signal sim:/mips/out_port hex
 # Add the exception pc.
 add wave -position end sim:/mips/epc
 radix signal sim:/mips/epc hex
@@ -25,4 +25,31 @@ force -freeze sim:/mips/reset 1
 run
 # Reset the reset.
 force -freeze sim:/mips/reset 0
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
 run

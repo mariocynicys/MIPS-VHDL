@@ -39,7 +39,7 @@ OPCODES = {
   'jc'  : '0111' '001' 'xxx' '1st' 'xxx',
   #C08
   # NOTE: MOV has it's operands swapped.
-  'mov' : '0010' '000' '2nd' '1st' 'xxx',
+  'mov' : '1000' '000' '2nd' '1st' 'xxx',
   # NOTE: Unused class.
   #C09
   'emp1': '1001' 'xxx' 'xxx' 'xxx' 'xxx',

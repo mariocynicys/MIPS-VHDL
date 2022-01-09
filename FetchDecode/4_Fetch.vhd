@@ -69,7 +69,7 @@ ARCHITECTURE FetchStageArch OF FetchStage IS
   -- That's why you won't see me using f_flsh in this code.
   SIGNAL state : INTEGER := HLTING;
   --------------------------------------------------------------
-  CONSTANT MAXPC : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"000000FF";
+  CONSTANT MAXPC : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"0000FF00";
 
 BEGIN
   inn <= in_port;

@@ -1,4 +1,4 @@
-main: af
+main: 0xaf
   mov $1, $7
   add $1, $7, $7
   iadd $5
@@ -7,32 +7,32 @@ main: af
   int 15
   hlt
 
-int1: a7            ; -> m[6]&m[7]
+int1: 0xa7            ; -> m[6]&m[7]
   mov $1, $7
   add $1, $7, $7
   rti
 
-int2: d             ; -> m[8]&m[9]
+int2: 0xd             ; -> m[8]&m[9]
   mov $1, $7
   add $1, $7, $7
   rti
 
-exp1: 13             ; -> m[2]&m[3]
+exp1: 0x13             ; -> m[2]&m[3]
   mov $1, $7
   add $1, $7, $7
   hlt
 
-exp2: 19             ; -> m[4]&m[5]
+exp2: 0x19             ; -> m[4]&m[5]
   mov $1, $7
   add $1, $7, $7
   hlt
 
-func1: 1f
+func1: 0x1f
   mov $1, $7
   add $1, $7, $7
   ret
 
-func2: 2f
+func2: 0x2f
   mov $1, $7
   add $1, $7, $7
   ret
