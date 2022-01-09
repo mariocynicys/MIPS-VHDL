@@ -172,10 +172,12 @@ BEGIN
     BE_alu,
     BE_brn,
     BE_int_cal,
+    BE_mw,
     BE_in_im,
     BE_func,
     BE_sr1, BE_sr2,
     BE_op1, BE_op2, BE_rsr1,
+    BM_flags,
     -- outputs
     EB_rsr1, EB_result, EB_flags,
     -- forwarding

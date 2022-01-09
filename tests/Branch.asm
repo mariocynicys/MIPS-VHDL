@@ -9,14 +9,19 @@ AND R0,R0,R0    # N=0,Z=1
 OUT R2
 RTI          # POP PC and flags restored
 
+exp2: 0x1000
+out r1
+out r2
+hlt
+
 main: 0x10
-IN R1     # R1=30
-IN R2     # R2=50
-IN R3     # R3=100
-IN R4     # R4=300
+ldm R1, 0x30     # R1=30
+ldm R2, 0x50     # R2=50
+ldm R3, 0x100     # R3=100
+ldm R4, 0x300     # R4=300
 Push R4   # sp=FFFFFFFE, M[FFFFFFFF]=300
 INT 2     # SP=FFFFFFFC, M[FFFFFFFD]=half next PC,M[FFFFFFFE]=other half next PC
-JMP R1 
+JMP R1    # taken
 INC R1	  # this statement shouldn't be executed
 hlt
 
@@ -37,7 +42,7 @@ JC R3      # Jump Not taken
 # check destination forwarding
 NOT R5     # R5=FFFF, Z= 0, C--> not change, N=1
 INT 0      # SP=FFFFFFFC, M[FFFFFFFD]=half next PC,M[FFFFFFFE]=other half next PC
-IN  R6     # R6=700, flag no change
+ldm  R6, 0x700     # R6=700, flag no change
 JN  R6     # jump taken, N = 0
 INC R1     # this statement shouldn't be executed
 ret ; end of main

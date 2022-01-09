@@ -21,6 +21,8 @@ STD R2,0x200(R5)   # M[210]=5, Exception in the 2nd run
 STD R1,0x201(R5)   # M[211]=19
 LDD R3,0x201(R5)   # R3=19
 LDD R4,0x200(R5)   # R4=5
-POP R3  # exception
+# POP R3  # exception
 ADD R1, R2, R3 # should not execute as their is an exception
+ldm r6, 0xffff
+jmp r6
 hlt

@@ -8,10 +8,12 @@ ENTITY ExecuteStage IS
     alu_en         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     brn            : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     intcal         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    mw             : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     in_imm         : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     func           : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     sr1, sr2       : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     op1, op2, rsr1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    o_flgs         : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     frsr1          : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     result         : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     flgs           : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := "000";
@@ -40,16 +42,16 @@ BEGIN
   frw : ENTITY work.Forwarder PORT MAP(sr1, sr2, wb_alu, dst_alu, wb_mem, dst_mem, fsr1, fsr2);
 
   new_pc        <= x"0000" & frsr1;
-  flgs_and_func <= flgs AND func AND (brn & brn & brn);
+  flgs_and_func <= o_flgs AND func AND (brn & brn & brn);
 
   WITH brn & func SELECT
   is_jmp <=
     "1" WHEN "1000",
     "0" WHEN OTHERS;
 
-  WITH intcal & func SELECT
+  WITH intcal & func & mw SELECT
   is_cal <=
-    "1" WHEN "1001",
+    "1" WHEN "10011",
     "0" WHEN OTHERS;
 
   WITH fsr1 SELECT

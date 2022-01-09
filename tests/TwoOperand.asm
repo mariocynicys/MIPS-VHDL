@@ -9,4 +9,6 @@ SUB R6,R5,R4    # R6= 0CDA , 970 C-->0, N-->0,Z-->0 here carry is implemented as
 AND R4,R7,R4    # R4= 0000 , C-->no change, N-->0, Z-->1 1070
 IADD R2,R2,0xFFFF # R2= 0018 (C = 1,N,Z= 0) 1170
 ADD R2,R1,R2    # R2= 001D (C,N,Z= 0) 1270
+ldm r6, 0xffff
+jmp r6
 hlt

@@ -1,6 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
+USE IEEE.std_logic_unsigned.ALL;
 
 ENTITY MemoryStage IS
   PORT (
@@ -32,9 +33,11 @@ ARCHITECTURE MemoryStageArch OF MemoryStage IS
   CONSTANT MAXSP                            : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00100000";
   SIGNAL stack_reg                          : STD_LOGIC_VECTOR(31 DOWNTO 0) := MAXSP;
   SIGNAL adr                                : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
+  SIGNAL pc_plus_one                        : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
   SIGNAL mw_adr0, mw_adr1, mr_adr0, mr_adr1 : STD_LOGIC_VECTOR(15 DOWNTO 0);
 BEGIN
   ram : ENTITY work.ram PORT MAP (clk, adr, mw, pc_op, mw_adr0, mw_adr1, mr_adr0, mr_adr1);
+  pc_plus_one <= pc + x"00000001";
 
   -- the data out of the memory, this might be just the result of the alu op.
   WITH mr SELECT
@@ -56,11 +59,11 @@ BEGIN
   -- lower 16-bit of memory write data.
   WITH pc_op SELECT
     mw_adr0 <=
-    pc(15 DOWNTO 0) WHEN "1",
+    pc_plus_one(15 DOWNTO 0) WHEN "1",
     wrt_data WHEN OTHERS;
 
   -- the upper 16-bit of memory write data.
-  mw_adr1 <= flgs & pc(28 DOWNTO 16);
+  mw_adr1 <= flgs & pc_plus_one(28 DOWNTO 16);
 
   -- when to set the set_pc flag, the new_pc should be returned to the fetch stage.
   WITH pc_op & mr SELECT

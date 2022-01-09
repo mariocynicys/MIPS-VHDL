@@ -159,6 +159,6 @@ BEGIN
   -- used only by the fetch, doesn't propagate.
   WITH oper & func SELECT
   int <=
-    "1" WHEN int_cal_op & cal_func,
+    "1" WHEN int_cal_op & int_func,
     "0" WHEN OTHERS;
 END ARCHITECTURE;
