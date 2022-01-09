@@ -107,7 +107,6 @@ BEGIN
     -- when this variable is set, this process will not enter the
     -- OPNORM state. This means that there is some BIG BOSS action
     -- occured and took over the normal execution.
-    VARIABLE not_norm_anymore : STD_LOGIC_VECTOR(0 DOWNTO 0);
   BEGIN
     IF falling_edge(clk) THEN
       -- reset the ex1 signal
@@ -121,7 +120,7 @@ BEGIN
       m_flsh <= "0";
       -------------------------------------------------------
       -- BIG BOSSES i.e. they don't give a fuck to the state i.e. operate in any state.
-      not_norm_anymore := rst OR m_setex OR m_setpc OR e_setpc OR f_setex;
+      -- Also if one of them executes, the current state wont take effect.
       IF rst = "1" THEN
         -- first check for a rst signal.
         state <= DBJING;
@@ -144,8 +143,10 @@ BEGIN
         IF m_newpc > MAXPC THEN
           f_setex <= "1";
           f_expc  <= m_hispc;
-          state   <= HLTING; -- any state other than OPNORM to stop the CU
-          m_flsh  <= "1";    -- flush the faulty instruction
+          -- you don't need to set the state since we know that it will be set
+          -- in the next falling edge when the ex1 takes effect.
+          -- state   <= HLTING; -- any state other than OPNORM to stop the CU
+          m_flsh <= "1"; -- flush the faulty instruction
         ELSE
           pc    <= m_newpc;
           state <= OPNORM;
@@ -155,8 +156,10 @@ BEGIN
         IF m_newpc > MAXPC THEN
           f_setex <= "1";
           f_expc  <= e_hispc;
-          state   <= HLTING; -- any state other than OPNORM to stop the CU
-          e_flsh  <= "1";    -- flush the faulty instruction
+          -- you don't need to set the state since we know that it will be set
+          -- in the next falling edge when the ex1 takes effect.
+          -- state   <= HLTING; -- any state other than OPNORM to stop the CU
+          e_flsh <= "1"; -- flush the faulty instruction
         ELSE
           pc    <= e_newpc;
           state <= OPNORM;
@@ -167,69 +170,70 @@ BEGIN
         epc    <= f_expc;
         state  <= DBJING;
         r_flsh <= "1"; -- this MIGHT be the faulty instruction
-      END IF;
-      ---------------------------------------------------------
-      ---------------------------------------------------------
-      ---------------------------------------------------------
-      ---------------------------------------------------------
-      IF state = HLTING THEN
-        -- was halting
-        -- as you see, doing nothing.
+      ELSE
         ---------------------------------------------------------
         ---------------------------------------------------------
         ---------------------------------------------------------
         ---------------------------------------------------------
-      ELSIF state = OPNORM AND not_norm_anymore = "0" THEN
-        -- operating normally (listening to incoming signals)
-        IF ldus = "1" THEN
-          -- don't move the pc if we encountered a load use case.
-          r_flsh <= "1";
-        ELSIF cu_hlt = "1" THEN
-          -- set the state to halting if we encountered a hlt.
-          state <= HLTING;
-        ELSIF cu_im = "1" THEN
-          -- if the past instruction was an immediate one.
-          IF STD_LOGIC_VECTOR(unsigned(pc) + 2) > MAXPC THEN
-            -- check that the pc doesn't go past its max.
-            f_setex <= "1";
-            f_expc  <= pc;
+        IF state = HLTING THEN
+          -- was halting
+          -- as you see, doing nothing.
+          ---------------------------------------------------------
+          ---------------------------------------------------------
+          ---------------------------------------------------------
+          ---------------------------------------------------------
+        ELSIF state = OPNORM THEN
+          -- operating normally (listening to incoming signals)
+          IF ldus = "1" THEN
+            -- don't move the pc if we encountered a load use case.
+            r_flsh <= "1";
+          ELSIF cu_hlt = "1" THEN
+            -- set the state to halting if we encountered a hlt.
+            state <= HLTING;
+          ELSIF cu_im = "1" THEN
+            -- if the past instruction was an immediate one.
+            IF STD_LOGIC_VECTOR(unsigned(pc) + 2) > MAXPC THEN
+              -- check that the pc doesn't go past its max.
+              f_setex <= "1";
+              f_expc  <= pc;
+            ELSE
+              -- increment the pc by 2.
+              pc <= STD_LOGIC_VECTOR(unsigned(pc) + 2);
+            END IF;
           ELSE
-            -- increment the pc by 2.
-            pc <= STD_LOGIC_VECTOR(unsigned(pc) + 2);
+            -- if the past instruction wasn't an immediate or had anything special.
+            IF cu_int = "1" THEN
+              -- check first if the past instruction was an int.
+              pc <= STD_LOGIC_VECTOR(resize(
+                unsigned(x"00000" & "000" & cu_dst & cu_sr1 & cu_sr2) + 6,
+                32));
+              state <= DBJING;
+            ELSIF STD_LOGIC_VECTOR(unsigned(pc) + 1) > MAXPC THEN
+              -- otherwise check that the pc doesn't go past its max.
+              f_setex <= "1";
+              f_expc  <= pc;
+            ELSE
+              -- then increment it.
+              pc <= STD_LOGIC_VECTOR(unsigned(pc) + 1);
+            END IF;
           END IF;
-        ELSE
-          -- if the past instruction wasn't an immediate or had anything special.
-          IF cu_int = "1" THEN
-            -- check first if the past instruction was an int.
-            pc <= STD_LOGIC_VECTOR(resize(
-              unsigned(x"00000" & "000" & cu_dst & cu_sr1 & cu_sr2) + 6,
-              32));
-            state <= DBJING;
-          ELSIF STD_LOGIC_VECTOR(unsigned(pc) + 1) > MAXPC THEN
-            -- otherwise check that the pc doesn't go past its max.
-            f_setex <= "1";
-            f_expc  <= pc;
-          ELSE
-            -- then increment it.
-            pc <= STD_LOGIC_VECTOR(unsigned(pc) + 1);
-          END IF;
+          ---------------------------------------------------------
+          ---------------------------------------------------------
+          ---------------------------------------------------------
+          ---------------------------------------------------------
+        ELSIF state = DBJING THEN
+          -- move the pc to what is read by the pc.
+          -- NOTE: it's not safe to mutate the pc without knowing whether
+          -- instruction & imm goes past MAXPC or not, but we are assuming
+          -- it will never happen.
+          pc    <= instruction & imm;
+          state <= OPNORM;
         END IF;
         ---------------------------------------------------------
         ---------------------------------------------------------
         ---------------------------------------------------------
         ---------------------------------------------------------
-      ELSIF state = DBJING AND not_norm_anymore = "0" THEN
-        -- move the pc to what is read by the pc.
-        -- NOTE: it's not safe to mutate the pc without knowing whether
-        -- instruction & imm goes past MAXPC or not, but we are assuming
-        -- it will never happen.
-        pc    <= instruction & imm;
-        state <= OPNORM;
       END IF;
-      ---------------------------------------------------------
-      ---------------------------------------------------------
-      ---------------------------------------------------------
-      ---------------------------------------------------------
     END IF;
   END PROCESS;
 END ARCHITECTURE;

@@ -29,14 +29,14 @@ ENTITY ExecuteStage IS
 END ENTITY;
 
 ARCHITECTURE ExecuteStageArch OF ExecuteStage IS
-  SIGNAL alu_op1, alu_op2 : STD_LOGIC_VECTOR(15 DOWNTO 0);
+  SIGNAL alu_op1, alu_op2 : STD_LOGIC_VECTOR(15 DOWNTO 0) := x"0000";
   SIGNAL n, z, c          : STD_LOGIC_VECTOR(0 DOWNTO 0);
   SIGNAL fsr1, fsr2       : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL is_jmp, is_cal   : STD_LOGIC_VECTOR(0 DOWNTO 0);
   SIGNAL flgs_and_func    : STD_LOGIC_VECTOR(2 DOWNTO 0);
 BEGIN
 
-  alu : ENTITY work.ALU PORT MAP(func, alu_op1, alu_op2, flgs(0 DOWNTO 0), result, z, n, c);
+  alu : ENTITY work.ALU PORT MAP(func, alu_op1, alu_op2, flgs, result, z, n, c);
   frw : ENTITY work.Forwarder PORT MAP(sr1, sr2, wb_alu, dst_alu, wb_mem, dst_mem, fsr1, fsr2);
 
   new_pc        <= x"0000" & frsr1;

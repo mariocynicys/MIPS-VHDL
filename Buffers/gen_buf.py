@@ -21,7 +21,7 @@ BEGIN
   PROCESS (clk)
   BEGIN
     IF rising_edge(clk) THEN
-      IF fsh = "1" or rst_out = "1" THEN
+      IF fsh = "1" THEN
 {2}
         rst_out <= "0";
       ELSE

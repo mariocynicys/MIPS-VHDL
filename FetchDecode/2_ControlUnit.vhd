@@ -28,7 +28,6 @@ END ENTITY;
 
 ARCHITECTURE ControlUnitArch OF ControlUnit IS
   SIGNAL oper : STD_LOGIC_VECTOR(3 DOWNTO 0);
-  SIGNAL call : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
   -------------------------------------------------------------
   -- class codes:
@@ -36,6 +35,7 @@ ARCHITECTURE ControlUnitArch OF ControlUnit IS
   CONSTANT in_op      : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0100";
   CONSTANT out_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0011";
   CONSTANT alu_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0010";
+  CONSTANT setc_op    : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0001";
   CONSTANT iadd_op    : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1100";
   CONSTANT push_op    : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0101";
   CONSTANT pop_op     : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0110";
@@ -83,6 +83,7 @@ BEGIN
   WITH oper SELECT
     alu <=
     "1" WHEN alu_op,
+    "1" WHEN setc_op,
     "1" WHEN iadd_op,
     "0" WHEN OTHERS;
 
