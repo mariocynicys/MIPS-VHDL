@@ -1,6 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
+USE IEEE.std_logic_unsigned.ALL;
 
 ENTITY FetchStage IS
   PORT (
@@ -52,12 +53,11 @@ ARCHITECTURE FetchStageArch OF FetchStage IS
   SIGNAL f_expc                   : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL sr1_ldus, sr2_ldus, ldus : STD_LOGIC_VECTOR(0 DOWNTO 0);
   SIGNAL cu_hlt, cu_int, f_setex  : STD_LOGIC_VECTOR(0 DOWNTO 0);
+  SIGNAL to_where                 : STD_LOGIC_VECTOR(8 DOWNTO 0);
   --------------------------PCLOCATIONS-------------------------
   CONSTANT main : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000000";
   CONSTANT exp1 : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000002";
   CONSTANT exp2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000004";
-  CONSTANT int1 : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000006";
-  CONSTANT int2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := x"00000008";
   ---------------------------STATEFUL---------------------------
   -- state no.0 -> HLTing and waiting for a rst
   -- state no.1 -> operating normally
@@ -65,6 +65,7 @@ ARCHITECTURE FetchStageArch OF FetchStage IS
   CONSTANT HLTING : INTEGER := 0;
   CONSTANT OPNORM : INTEGER := 1;
   CONSTANT DBJING : INTEGER := 2;
+  CONSTANT ESCAPE : INTEGER := 3;
   -- Note that being on HLTING or DBJING forces the CU to output zeros.
   -- That's why you won't see me using f_flsh in this code.
   SIGNAL state : INTEGER := HLTING;
@@ -204,10 +205,9 @@ BEGIN
             -- if the past instruction wasn't an immediate or had anything special.
             IF cu_int = "1" THEN
               -- check first if the past instruction was an int.
-              pc <= STD_LOGIC_VECTOR(resize(
-                unsigned(x"00000" & "000" & cu_dst & cu_sr1 & cu_sr2) + 6,
-                32));
-              state <= DBJING;
+              pc       <= x"00000006";
+              to_where <= cu_dst & cu_sr1 & cu_sr2;
+              state    <= ESCAPE;
             ELSIF STD_LOGIC_VECTOR(unsigned(pc) + 1) > MAXPC THEN
               -- otherwise check that the pc doesn't go past its max.
               f_setex <= "1";
@@ -228,6 +228,9 @@ BEGIN
           -- it will never happen.
           pc    <= instruction & imm;
           state <= OPNORM;
+        ELSIF state = ESCAPE THEN
+          pc    <= (instruction & imm) + (x"00000" & "000" & to_where);
+          state <= DBJING;
         END IF;
         ---------------------------------------------------------
         ---------------------------------------------------------

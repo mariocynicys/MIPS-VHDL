@@ -12,6 +12,7 @@ OPCODES = {
   # OPCODE = Class[3:0] Func[6:4] Rdst[9:7] Rsrc1[12:10] Rsrc2[15:13]
   # Ideally Rdst is the 1st operand, Rsrc1 is the 2nd, and Rsrc2 is the 3rd.
   #C00
+  'inv' : '0000' '000' 'xxx' 'xxx' 'xxx',
   'nop' : '0000' '000' 'xxx' 'xxx' 'xxx',
   'hlt' : '0000' '001' 'xxx' 'xxx' 'xxx',
   # NOTE: C01 & C02 are classes for ALU operations.
@@ -107,7 +108,6 @@ blocks: Dict[str, Union[Block, List[Block]]] = {
   'exp1': Block(stopper='hlt', wadr=2),
   'exp2': Block(stopper='hlt', wadr=4),
   'int1': Block(stopper='rti', wadr=6),
-  'int2': Block(stopper='rti', wadr=8),
   'func': [], # List of Blocks
 }
 
@@ -139,6 +139,8 @@ def convert(instruction: List[str], ofrom: Format) -> Tuple:
     # Convert the index to a 9-bit binary number.
     ind = Format.BIN.fmt(9).format(int(dst, 0))
     opc = opc.replace(9 * 'i', ind)
+  elif opr == 'inv':
+    imm = Format.BIN.fmt(16).format(int('0x3000', 0))
   # Remove any $ and r which are the registers' identifiers
   # and format the registers' slot in binary.
   rc1 = Format.BIN.fmt(3).format(int(rc1.replace('$', '')
@@ -202,27 +204,31 @@ def main():
     if block_name.startswith(tuple(blocks.keys())):
       block_addr = block_line.split(':', 1)[1]
       # Default stopper and write back address for functions.
-      stopper, wadr = 'ret',  None
+      stopper, wadr = ['ret', 'rti'],  None # NOTE: you made stopper into a list
       # Blocks other than functions can't be defined twice, and have different stopper.
       if not block_name.startswith('func'):
         assert isinstance(blocks.get(block_name), Block), \
           f'{block_name} is not a valid block name.'
         assert not blocks[block_name].code, f'{block_name} is already defined.'
-        stopper = blocks[block_name].stopper
+        stopper = [blocks[block_name].stopper] # NOTE: you made stopper into a list
         wadr = blocks[block_name].wadr
       # Create a new code block.
       code_block = Block(addr=int(block_addr, 0), name=block_name,
                          stopper=stopper, wadr=wadr)
       index += 1
       while True:
-        code_block.code.extend(convert(instructions[index], oform))
-        if instructions[index][0] == code_block.stopper:
+        if code_block.name == 'intv':
+          code_block.code.append(block_addr)
+        else:
+          code_block.code.extend(convert(instructions[index], oform))
+        if instructions[index][0] in code_block.stopper:
           break
         index += 1
       if not block_name.startswith('func'):
         blocks[block_name] = code_block
       else:
         blocks['func'].append(code_block)
+      code_block.stopper = instructions[index - 1][0] # NOTE: you made stopper back into a str
     else:
       raise RuntimeError(f'{instructions[index]} outside a code block.')
     # Advance to the next block.

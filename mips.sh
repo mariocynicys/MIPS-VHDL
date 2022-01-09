@@ -1,4 +1,4 @@
-ASM_FILE=tests/Branch.asm
+ASM_FILE=tests/bonus.asm
 MEM_FILE=tests/mem.asm
 # You need to source this file.
 alias vcom='~/intelFPGA/20.1/modelsim_ase/bin/vcom -2008 -work work -explicit -stats=none'
