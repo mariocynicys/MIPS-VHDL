@@ -22,5 +22,5 @@ cat mem.sav > mem.mem
 # Open modelsim in the background.
 vsim mips.mpf&
 # Disown the current modelsim instance.
-# NOTE: This disowns other programs when this script is sourced.
+# NOTE: This disowns the last backgrounded program which is vsim in this case.
 disown
